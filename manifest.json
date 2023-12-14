@@ -1,0 +1,9 @@
+{
+  "name": "WorkforceRealismEnhancement",
+  "version_number": "0.0.1",
+  "website_url": "https://github.com/89pleasure/cities2-wre",
+  "description": "Increases the numbers of workers for commercials and industrial companies.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100"
+  ]
+}
