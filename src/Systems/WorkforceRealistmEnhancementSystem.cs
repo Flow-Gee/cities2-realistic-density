@@ -4,10 +4,13 @@ using Game.Companies;
 using Game.Prefabs;
 using Game.Tools;
 using System.Runtime.CompilerServices;
+using Unity.Burst;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine.Scripting;
 using WorkforceRealismEnhancement.Prefabs;
 
@@ -38,6 +41,8 @@ namespace WorkforceRealismEnhancement.Systems
                         ComponentType.ReadOnly<ServiceCompanyData>(),
                         ComponentType.ReadOnly<PowerPlantData>(),
                         ComponentType.ReadOnly<SchoolData>(),
+                        ComponentType.ReadOnly<StorageLimitData>(),
+                        ComponentType.ReadOnly<TransportCompanyData>(),
                     ],
                     None =
                     [
@@ -62,6 +67,8 @@ namespace WorkforceRealismEnhancement.Systems
             m_TypeHandle.ServiceCompanyDataLookup.Update(ref CheckedStateRef);
             m_TypeHandle.PowerPlantDataLookup.Update(ref CheckedStateRef);
             m_TypeHandle.SchoolDataLookup.Update(ref CheckedStateRef);
+            m_TypeHandle.StorageLimitDataLookup.Update(ref CheckedStateRef);
+            m_TypeHandle.TransportCompanyDataLookup.Update(ref CheckedStateRef);
 
             UpdateWorkProviderJob updateWorkplaceData = new()
             {
@@ -72,6 +79,8 @@ namespace WorkforceRealismEnhancement.Systems
                 ServiceCompanyDataLookup = m_TypeHandle.ServiceCompanyDataLookup,
                 PowerPlantDataLookup = m_TypeHandle.PowerPlantDataLookup,
                 SchoolDataLookup = m_TypeHandle.SchoolDataLookup,
+                StorageLimitDataLookup = m_TypeHandle.StorageLimitDataLookup,
+                TransportCompanyDataLookup = m_TypeHandle.TransportCompanyDataLookup,
 
                 Ecb = m_ModificationEndBarrier.CreateCommandBuffer().AsParallelWriter(),
             };
@@ -95,6 +104,8 @@ namespace WorkforceRealismEnhancement.Systems
                 ServiceCompanyDataLookup = state.GetComponentLookup<ServiceCompanyData>(false);
                 PowerPlantDataLookup = state.GetComponentLookup<PowerPlantData>(false);
                 SchoolDataLookup = state.GetComponentLookup<SchoolData>(false);
+                StorageLimitDataLookup = state.GetComponentLookup<StorageLimitData>(false);
+                TransportCompanyDataLookup = state.GetComponentLookup<TransportCompanyData>(false);
             }
 
             public ComponentLookup<WorkplaceData> WorkplaceDataLookup;
@@ -102,9 +113,10 @@ namespace WorkforceRealismEnhancement.Systems
             public ComponentLookup<ServiceCompanyData> ServiceCompanyDataLookup;
             public ComponentLookup<PowerPlantData> PowerPlantDataLookup;
             public ComponentLookup<SchoolData> SchoolDataLookup;
+            public ComponentLookup<StorageLimitData> StorageLimitDataLookup;
+            public ComponentLookup<TransportCompanyData> TransportCompanyDataLookup;
         }
     }
-
 
     public struct UpdateWorkProviderJob : IJobChunk
     {
@@ -116,57 +128,95 @@ namespace WorkforceRealismEnhancement.Systems
         public ComponentLookup<ServiceCompanyData> ServiceCompanyDataLookup;
         public ComponentLookup<PowerPlantData> PowerPlantDataLookup;
         public ComponentLookup<SchoolData> SchoolDataLookup;
-
-        // The multiplier to change the overall workforce
-        int workforceAdjustment;
+        public ComponentLookup<StorageLimitData> StorageLimitDataLookup;
+        public ComponentLookup<TransportCompanyData> TransportCompanyDataLookup;
 
         public void Execute(in ArchetypeChunk chunk,
             int unfilteredChunkIndex,
             bool useEnabledMask,
             in v128 chunkEnabledMask)
         {
-            workforceAdjustment = 2;
             NativeArray<Entity> entities = chunk.GetNativeArray(EntityHandle);
             ChunkEntityEnumerator enumerator = new(useEnabledMask, chunkEnabledMask, chunk.Count);
             while (enumerator.NextEntityIndex(out int i))
             {
+                Modded modded = default;
                 Entity entity = entities[i];
                 if (WorkplaceDataLookup.TryGetComponent(entity, out WorkplaceData workplaceData))
                 {
                     // Power plants need a lot more workers for more realism
                     if (PowerPlantDataLookup.HasComponent(entity))
                     {
-                        workforceAdjustment = 8;
+                        Ecb.SetComponent(i, entity, UpdateWorkplaceData(WorkforceFactors.PowerPlant.Medium, workplaceData, modded));
+                        continue;
                     }
 
                     if (SchoolDataLookup.HasComponent(entity))
                     {
-                        workforceAdjustment = 3;
+                        Ecb.SetComponent(i, entity, UpdateWorkplaceData(WorkforceFactors.School.Medium, workplaceData, modded));
+                        continue;
                     }
 
-                    WorkplaceData updatedWorkplaceData = workplaceData;
-                    updatedWorkplaceData.m_MaxWorkers *= workforceAdjustment;
-                    Ecb.SetComponent(i, entity, updatedWorkplaceData);
-
+                    // Industrial buildings only
                     if (IndustrialProcessDataLookup.TryGetComponent(entity, out IndustrialProcessData industrialProcessData))
                     {
+                        float workforceFactor = WorkforceFactors.IndustryProcessing.High;
+                        Ecb.SetComponent(i, entity, UpdateWorkplaceData(workforceFactor, workplaceData, modded));
+
                         IndustrialProcessData updatedIndustrialProcessData = industrialProcessData;
-                        updatedIndustrialProcessData.m_MaxWorkersPerCell *= workforceAdjustment;
-                        //updatedIndustrialProcessData.m_WorkPerUnit /= adjustmentValue;
+                        modded.industrialProcessData_MaxWorkersPerCell = industrialProcessData.m_MaxWorkersPerCell;
+                        updatedIndustrialProcessData.m_MaxWorkersPerCell *= workforceFactor;
+                        modded.industrialProcessData_Output_Amount = industrialProcessData.m_Output.m_Amount;
+                        updatedIndustrialProcessData.m_Output.m_Amount *= (int)math.round(workforceFactor);
+                        // updatedIndustrialProcessData.m_WorkPerUnit += (int)math.round(updatedIndustrialProcessData.m_WorkPerUnit * workforceFactor);
+
                         Ecb.SetComponent(i, entity, updatedIndustrialProcessData);
+
+                        if (StorageLimitDataLookup.TryGetComponent(entity, out StorageLimitData storageLimitData))
+                        {
+                            StorageLimitData updatedStorageLimitData = storageLimitData;
+                            modded.storageLimitData_limit = storageLimitData.m_Limit;
+                            updatedStorageLimitData.m_Limit *= (int)math.round(workforceFactor);
+                            Ecb.SetComponent(i, entity, updatedStorageLimitData);
+                        }
+
+                        if (TransportCompanyDataLookup.TryGetComponent(entity, out TransportCompanyData transportCompanyData))
+                        {
+                            TransportCompanyData updatedTransportCompanyData = transportCompanyData;
+                            modded.transportCompanyData_MaxTransports = transportCompanyData.m_MaxTransports;
+                            updatedTransportCompanyData.m_MaxTransports = (int)math.round(workforceFactor);
+                            Ecb.SetComponent(i, entity, updatedTransportCompanyData);
+                        }
+
+                        continue;
                     }
 
+                    // Commercial buildings only
                     if (ServiceCompanyDataLookup.TryGetComponent(entity, out ServiceCompanyData serviceCompanyData))
                     {
+                        float workforceFactor = WorkforceFactors.Commercial.High;
+
                         ServiceCompanyData updatedServiceCompanyData = serviceCompanyData;
-                        updatedServiceCompanyData.m_MaxWorkersPerCell *= workforceAdjustment;
+                        modded.serviceCompanyData_MaxWorkersPerCell = serviceCompanyData.m_MaxWorkersPerCell;
+                        updatedServiceCompanyData.m_MaxWorkersPerCell *= workforceFactor;
                         //updatedServiceCompanyData.m_WorkPerUnit /= adjustmentValue;
                         Ecb.SetComponent(i, entity, updatedServiceCompanyData);
+                        continue;
                     }
 
-                    Ecb.AddComponent(i, entity, new Modded());
+                    // Add a Modded component to prevent this entity from being updated again
+                    Ecb.AddComponent(i, entity, modded);
                 }
             }
+        }
+
+        private readonly WorkplaceData UpdateWorkplaceData(float factor, WorkplaceData workplaceData, Modded modded)
+        {
+            WorkplaceData updatedWorkplaceData = workplaceData;
+            modded.workplaceData_MaxWorkers = workplaceData.m_MaxWorkers;
+            updatedWorkplaceData.m_MaxWorkers = (int)math.round(updatedWorkplaceData.m_MaxWorkers * factor);
+
+            return updatedWorkplaceData;
         }
     }
 }
