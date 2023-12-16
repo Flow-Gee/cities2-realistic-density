@@ -7,7 +7,7 @@ using System.Linq;
     using BepInEx.Unity.Mono;
 #endif
 
-namespace WorkforceRealismEnhancement
+namespace RealisticDensity
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin

@@ -11,7 +11,7 @@
 		<AssemblyVersion>$(PluginVersion)</AssemblyVersion>
 		<FileVersion>$(PluginVersion)</FileVersion>
 		<Version>$(PluginVersion)</Version>
-		<RootNamespace>WorkforceRealismEnhancement</RootNamespace>
+		<RootNamespace>RealisticDensity</RootNamespace>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<RestoreAdditionalProjectSources>
 			https://api.nuget.org/v3/index.json;

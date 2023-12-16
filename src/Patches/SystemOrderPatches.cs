@@ -1,9 +1,9 @@
 ﻿using Game;
 using Game.Common;
 using HarmonyLib;
-using WorkforceRealismEnhancement.Systems;
+using RealisticDensity.Systems;
 
-namespace WorkforceRealismEnhancement.Patches
+namespace RealisticDensity.Patches
 {
     [HarmonyPatch(typeof(SystemOrder))]
     public static class SystemOrder_Patches
@@ -12,7 +12,7 @@ namespace WorkforceRealismEnhancement.Patches
         [HarmonyPostfix]
         public static void Postfix(UpdateSystem updateSystem)
         {
-            updateSystem?.UpdateAt<WorkforceRealistmEnhancementSystem>(SystemUpdatePhase.ModificationEnd);
+            updateSystem?.UpdateAt<RealisticDensitySystem>(SystemUpdatePhase.ModificationEnd);
         }
     }
 }

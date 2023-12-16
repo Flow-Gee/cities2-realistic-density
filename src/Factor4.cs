@@ -1,6 +1,6 @@
-﻿namespace WorkforceRealismEnhancement
+﻿namespace RealisticDensity
 {
-    public struct WorkforceFactor(float @default, float low, float medium, float high)
+    public struct Factor4(float @default, float low, float medium, float high)
     {
         public float Default = @default;
         public float Low = low;

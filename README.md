@@ -1,4 +1,4 @@
-# WREM (WorkforceRealismEnhancement Mod) for Cities Skylines II
+# RealisticDensity for Cities Skylines II
 
 Is a mod that tries to allow a more realistic number of workplaces in individual buildings.
 This increases the bustle factor but also the traffic density and at the same time increases the difficulty of the game. 
@@ -29,4 +29,4 @@ Join our discord community: [https://discord.gg/M9rgRtGcRa](https://discord.gg/M
 ## Credits
 - Thanks **cptimus-code** for his C# knowledge and help
 - Thanks to **captain_on_coit** for HookUI and help with JSX and React
-- Thanks to **Bruceyboy24804** for testing and feedback
+- Thanks to **Bruceyboy24804**, **Woovie**, **Rebecca** and **mad** for being first testers

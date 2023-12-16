@@ -1,11 +1,11 @@
 ﻿using Colossal.Serialization.Entities;
 using Unity.Entities;
 
-namespace WorkforceRealismEnhancement.Prefabs
+namespace RealisticDensity.Prefabs
 {
-    public struct Modded : IComponentData, IQueryTypeParameter, ISerializable
+    public struct RealisticDensityData : IComponentData, IQueryTypeParameter, ISerializable
     {
-        public Modded()
+        public RealisticDensityData()
         {
 
         }
