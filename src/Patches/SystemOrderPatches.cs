@@ -12,7 +12,7 @@ namespace RealisticDensity.Patches
         [HarmonyPostfix]
         public static void Postfix(UpdateSystem updateSystem)
         {
-            updateSystem?.UpdateAt<RealisticDensitySystem>(SystemUpdatePhase.ModificationEnd);
+            updateSystem?.UpdateAt<RealisticDensitySystem>(SystemUpdatePhase.GameSimulation);
         }
     }
 }

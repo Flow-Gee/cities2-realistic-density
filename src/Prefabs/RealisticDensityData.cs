@@ -1,4 +1,5 @@
 ﻿using Colossal.Serialization.Entities;
+using RealisticDensity.Systems;
 using Unity.Entities;
 
 namespace RealisticDensity.Prefabs
@@ -9,6 +10,8 @@ namespace RealisticDensity.Prefabs
         {
 
         }
+
+        public int version = RealisticDensitySystem.kProductionFactor;
 
         // WorkplaceData
         public int workplaceData_MaxWorkers = default;
@@ -30,6 +33,7 @@ namespace RealisticDensity.Prefabs
 
         public void Serialize<TWriter>(TWriter writer) where TWriter : IWriter
         {
+            writer.Write(version);
             writer.Write(workplaceData_MaxWorkers);
             writer.Write(industrialProcessData_MaxWorkersPerCell);
             writer.Write(industrialProcessData_WorkPerUnit);
@@ -42,6 +46,7 @@ namespace RealisticDensity.Prefabs
 
         public void Deserialize<TReader>(TReader reader) where TReader : IReader
         {
+            reader.Read(out version);
             reader.Read(out workplaceData_MaxWorkers);
             reader.Read(out industrialProcessData_MaxWorkersPerCell);
             reader.Read(out industrialProcessData_WorkPerUnit);
