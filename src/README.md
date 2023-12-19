@@ -3,7 +3,7 @@
 Have you always been annoyed that you have to build such large industrial areas? Or that your business takes up almost as much space as your residential areas?
 Why a power plant only has 10 employees or a high school with 2000 students only employs a handful of teachers?
 
-Then this mod is just right for you. 
+**Then this mod is just right for you.**
 
 ## Features:
 - Increased employee numbers for Commercial, Industrial, and Office zones
@@ -20,8 +20,9 @@ Then this mod is just right for you.
 - Increased employee numbers for unique buildings
 
 ## Important Information:
-- **The mod is currently in the BETA phase**
-- **The mod is currently activated globally for all cities!**
+- **The mod is currently in the BETA phase - so problems can therefore occur**
+- **The mod is currently activated globally for all your cities!**
+- **It has no impact on your savegame**
 - This mod has an impact on the performance of the game (by design)
 - It is recommended to use the mod in a new city
 - However, it is possible to use the mod in an existing city, as it does not alter the employee numbers of already existing buildings
@@ -36,9 +37,9 @@ I do recommend using the [Thunderstore.io mod manager](https://www.overwolf.com/
 Simply download the latest release from the [releases page](https://github.com/89pleasure/cities2-realistic-density/releases)
 and extract it to your `Cities Skylines II /bepinex/plugins` folder.
 
-## Feedback and Support:
-- Feedback and suggestions are welcome and can be posted in the [Link to Discussion Forum].
-- Support the development through donations via [Link to Donation Platform].
+## Community, Feedback & Support
+If you need any help or are you interested in modding yourself?
+Join our discord community: [https://discord.gg/M9rgRtGcRa](https://discord.gg/M9rgRtGcRa)
 
 ## License:
 - This mod is subject to the [License Type] license. Please read the license terms before using the mod.
