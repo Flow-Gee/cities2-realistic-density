@@ -19,6 +19,13 @@ Then this mod is just right for you.
 - Increased employee numbers for public transport buildings
 - Increased employee numbers for unique buildings
 
+## Important Information:
+- **The mod is currently in the BETA phase**
+- **The mod is currently activated globally for all cities!**
+- This mod has an impact on the performance of the game (by design)
+- It is recommended to use the mod in a new city
+- However, it is possible to use the mod in an existing city, as it does not alter the employee numbers of already existing buildings
+
 ## Requirement
 - [BepInEx v5](https://thunderstore.io/c/cities-skylines-ii/p/BepInEx/BepInExPack/)
 
@@ -28,13 +35,6 @@ I do recommend using the [Thunderstore.io mod manager](https://www.overwolf.com/
 ## Manual installation
 Simply download the latest release from the [releases page](https://github.com/89pleasure/cities2-realistic-density/releases)
 and extract it to your `Cities Skylines II /bepinex/plugins` folder.
-
-## Important Information:
-- The mod is currently in the beta phase
-- The mod is currently activated globally for all cities!
-- This mod has an impact on the performance of the game (by design)
-- It is recommended to use the mod in a new city
-- However, it is possible to use the mod in an existing city, as it does not alter the employee numbers of already existing buildings
 
 ## Feedback and Support:
 - Feedback and suggestions are welcome and can be posted in the [Link to Discussion Forum].
