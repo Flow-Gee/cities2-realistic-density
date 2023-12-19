@@ -419,9 +419,19 @@
 	<PropertyGroup Condition="'$(BepInExVersion)' == '6'">
 		<DefineConstants>$(DefineConstants);BEPINEX_V6</DefineConstants>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="DefaultSettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="UI\" />
+	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="if not exist &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)&quot; mkdir &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)\$(ProjectName).dll&quot;;&#xD;&#xA;powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)build.ps1&quot; &quot;$(ProjectName)&quot; &quot;$(PluginVersion)&quot; &quot;$(ProjectDir)\&quot; &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)\\&quot; $(BepInExVersion)" />
+		<Exec Command="if not exist &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)&quot; mkdir &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)\$(ProjectName).dll&quot;;&#xD;&#xA;copy /Y &quot;$(TargetDir)DefaultSettings.json&quot; &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)\&quot;&#xD;&#xA;powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)build.ps1&quot; &quot;$(ProjectName)&quot; &quot;$(PluginVersion)&quot; &quot;$(ProjectDir)\&quot; &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)\\&quot; $(BepInExVersion)" />
 	</Target>
 	
 	<ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://jsonapi.org/schema" /></VisualStudio></ProjectExtensions>

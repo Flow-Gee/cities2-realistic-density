@@ -1,4 +1,4 @@
-﻿namespace RealisticDensity
+﻿namespace RealisticDensity.Common
 {
     public struct Factor4(float @default, float low, float medium, float high)
     {
