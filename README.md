@@ -5,6 +5,11 @@ Why a power plant only has 10 employees or a high school with 2000 students only
 
 **Then this mod is just right for you.**
 
+## Updates
+- **v0.7.0 High density office fix**
+	- Fixes support for high density office buildings
+	- Adjusted the employee numbers for high density office buildings
+
 ## Features:
 - Increased employee numbers for Commercial, Industrial, and Office zones
 - Increased employee numbers for service buildings such as schools, hospitals, clinics, power plants, police, fire stations, cargo train terminals, and harbors
@@ -49,9 +54,11 @@ If you need any help or are you interested in modding yourself?
 Join our discord community: [https://discord.gg/M9rgRtGcRa](https://discord.gg/M9rgRtGcRa)
 
 ## Credits
-- Thanks **cptimus-code** for his C# knowledge and help
+- Thanks **optimus-code** for his C# knowledge and help
 - Thanks to **captain_on_coit** for HookUI and help with JSX and React
-- Thanks to **Susanne**, **Bruceyboy24804**, **Woovie**, **Rebecca** and **mad**
+
+## Special thanks to:
+- **Susanne**, **Bruceyboy24804**, **Woovie**, **Rebecca** and **mad** for their testing and feedback
 
 ## License:
 - This mod is subject to the GNU license. Please read the license terms before using the mod.

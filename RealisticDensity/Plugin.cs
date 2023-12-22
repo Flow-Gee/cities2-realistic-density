@@ -2,7 +2,6 @@
 using HarmonyLib;
 using System.Reflection;
 using System.Linq;
-using HookUILib.Core;
 
 #if BEPINEX_V6
     using BepInEx.Unity.Mono;
