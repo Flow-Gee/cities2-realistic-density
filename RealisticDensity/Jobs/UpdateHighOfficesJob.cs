@@ -29,7 +29,7 @@ namespace RealisticDensity.Jobs
                     ],
                     None =
                     [
-                        ComponentType.ReadOnly<RealisticDensityData>(),
+                        ComponentType.ReadOnly<DefaultData>(),
                         ComponentType.Exclude<Deleted>(),
                         ComponentType.Exclude<Temp>(),
                     ],
@@ -70,7 +70,7 @@ namespace RealisticDensity.Jobs
             while (enumerator.NextEntityIndex(out int i))
             {
                 Entity entity = entities[i];
-                RealisticDensityData realisticDensityData = default;
+                DefaultData realisticDensityData = new();
                 if (BuildingPropertyDataLookup.TryGetComponent(entity, out BuildingPropertyData buildingPropertyData))
                 {
                     float workforceFactor = settings.OfficesFactor;

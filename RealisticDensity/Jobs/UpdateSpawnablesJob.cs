@@ -12,7 +12,6 @@ using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace RealisticDensity.Jobs
 {
@@ -39,7 +38,7 @@ namespace RealisticDensity.Jobs
                     ],
                     None =
                     [
-                        ComponentType.ReadOnly<RealisticDensityData>(),
+                        ComponentType.ReadOnly<DefaultData>(),
                         ComponentType.Exclude<Deleted>(),
                         ComponentType.Exclude<Temp>(),
                     ],
@@ -102,7 +101,7 @@ namespace RealisticDensity.Jobs
             while (enumerator.NextEntityIndex(out int i))
             {
                 Entity entity = entities[i];
-                RealisticDensityData realisticDensityData = default;
+                DefaultData realisticDensityData = new();
                 if (WorkplaceDataLookup.TryGetComponent(entity, out WorkplaceData workplaceData))
                 {
                     // Industrial buildings && low offices only
@@ -191,7 +190,7 @@ namespace RealisticDensity.Jobs
             return false;
         }
 
-        private bool IsOffice(IndustrialProcessData industrialProcessData)
+        private readonly bool IsOffice(IndustrialProcessData industrialProcessData)
         {
             return industrialProcessData.m_Output.m_Resource switch
             {

@@ -37,7 +37,7 @@ namespace RealisticDensity.Jobs
                     ],
                     None =
                     [
-                        ComponentType.ReadOnly<RealisticDensityData>(),
+                        ComponentType.ReadOnly<DefaultData>(),
                         ComponentType.Exclude<Deleted>(),
                         ComponentType.Exclude<Temp>(),
                     ],
@@ -96,7 +96,8 @@ namespace RealisticDensity.Jobs
             while (enumerator.NextEntityIndex(out int entityIndex))
             {
                 Entity entity = entities[entityIndex];
-                RealisticDensityData realisticDensityData = default;
+                DefaultData realisticDensityData = new();
+
                 if (WorkplaceDataLookup.TryGetComponent(entity, out WorkplaceData workplaceData))
                 {
                     UpdateWorkplaceData(entity, workplaceData, ref realisticDensityData, entityIndex);
@@ -104,7 +105,7 @@ namespace RealisticDensity.Jobs
             }
         }
 
-        private void UpdateWorkplaceData(Entity entity, WorkplaceData workplaceData, ref RealisticDensityData realisticDensityData, int entityIndex)
+        private void UpdateWorkplaceData(Entity entity, WorkplaceData workplaceData, ref DefaultData realisticDensityData, int entityIndex)
         {
             // Power plants need a lot more workers for more realism
             if (PowerPlantDataLookup.HasComponent(entity))

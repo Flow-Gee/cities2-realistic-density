@@ -6,6 +6,8 @@ Why a power plant only has 10 employees or a high school with 2000 students only
 **Then this mod is just right for you.**
 
 ## Updates
+- **v0.9.0 Fix save game serialization**
+- **v0.8.0 Failed attempt to fix serialization (sorry)**
 - **v0.7.0 High density office fix**
 	- Fixes support for high density office buildings
 	- Adjusted the employee numbers for high density office buildings
@@ -27,7 +29,7 @@ Why a power plant only has 10 employees or a high school with 2000 students only
 ## Important Information:
 - **The mod is currently in the BETA phase - so problems can therefore occur**
 - **The mod is currently activated globally for all your cities!**
-- **It has no impact on your savegame**
+- **It has an impact on your savegame and can possibly break your city**
 - This mod has an impact on the performance of the game (by design)
 - It is recommended to use the mod in a new city
 - However, it is possible to use the mod in an existing city, as it does not alter the employee numbers of already existing buildings

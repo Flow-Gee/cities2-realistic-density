@@ -14,12 +14,12 @@ namespace RealisticDensity.Systems
 {
     public partial class RealisticDensitySystem : GameSystemBase
     {
-        readonly public static int kComponentVersion = 2;
+        readonly public static int kComponentVersion = 1;
 
         // Workforce is a third of the production outcome calculation for spawnable entities like commercial, industrial and offices
         readonly public static int kProductionFactor = 3;
 
-        private static string AssemblyPath = Path.GetDirectoryName(typeof(RealisticDensitySystem).Assembly.Location);
+        private static readonly string AssemblyPath = Path.GetDirectoryName(typeof(RealisticDensitySystem).Assembly.Location);
         public static string UIPath = AssemblyPath + "\\UI\\";
 
         private EndFrameBarrier Barrier;
@@ -56,7 +56,7 @@ namespace RealisticDensity.Systems
             m_UpdateHighOfficesJobQuery = GetEntityQuery(updateHighOfficesQuery.Query);
 
             RequireAnyForUpdate(m_UpdateCityServicesJobQuery, m_UpdateSpawnablesJobQuery);
-            Mod.Instance.Log.Info("System created.");
+            Mod.Instance.Log.DebugFormat("System created.");
         }
 
         protected override void OnGameLoadingComplete(Purpose purpose, GameMode mode)
@@ -74,6 +74,7 @@ namespace RealisticDensity.Systems
 
             if (m_LocalSettings.Settings.CityServicesEnabled && !m_UpdateCityServicesJobQuery.IsEmptyIgnoreFilter)
             {
+                Mod.Instance.Log.Info("Run UpdateCityServicesJob");
                 m_UpdateCityServicesJobTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateCityServicesJob updateCityServicesJob = new()
                 {
@@ -93,6 +94,7 @@ namespace RealisticDensity.Systems
 
             if (m_LocalSettings.Settings.SpawnablesEnabled && !m_UpdateSpawnablesJobQuery.IsEmptyIgnoreFilter)
             {
+                Mod.Instance.Log.Info("Run UpdateSpawnablesJob");
                 m_UpdateSpawnablesJobTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateSpawnablesJob updateSpawnablesJob = new()
                 {
@@ -113,6 +115,7 @@ namespace RealisticDensity.Systems
 
             if (m_LocalSettings.Settings.OfficesEnabled && !m_UpdateHighOfficesJobQuery.IsEmptyIgnoreFilter)
             {
+                Mod.Instance.Log.Info("Run UpdateHighOfficesJob");
                 m_UpdateHighOfficesJobTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateHighOfficesJob updateHighOfficesJob = new()
                 {

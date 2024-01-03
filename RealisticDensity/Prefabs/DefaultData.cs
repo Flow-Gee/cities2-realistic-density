@@ -4,14 +4,14 @@ using Unity.Entities;
 
 namespace RealisticDensity.Prefabs
 {
-    public struct RealisticDensityData : IComponentData, IQueryTypeParameter, ISerializable
+    public struct DefaultData : IComponentData, IQueryTypeParameter, ISerializable
     {
-        public RealisticDensityData()
+        public DefaultData()
         {
-
+            version = RealisticDensitySystem.kComponentVersion;
         }
 
-        public int version = RealisticDensitySystem.kProductionFactor;
+        public int version;
 
         // WorkplaceData
         public int workplaceData_MaxWorkers = default;
@@ -55,10 +55,7 @@ namespace RealisticDensity.Prefabs
             reader.Read(out industrialProcessData_MaxWorkersPerCell);
             reader.Read(out industrialProcessData_WorkPerUnit);
             reader.Read(out industrialProcessData_Output_Amount);
-            if (version >= 2)
-            {
-                reader.Read(out buildingPropertyData_SpaceMultiplier);
-            }
+            reader.Read(out buildingPropertyData_SpaceMultiplier);
             reader.Read(out storageLimitData_limit);
             reader.Read(out transportCompanyData_MaxTransports);
             reader.Read(out serviceCompanyData_MaxWorkersPerCell);

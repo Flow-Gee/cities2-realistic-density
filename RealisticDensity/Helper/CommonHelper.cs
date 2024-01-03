@@ -12,7 +12,7 @@ namespace RealisticDensity.Helper
             return (of * factor - of) / RealisticDensitySystem.kProductionFactor;
         }
 
-        public static WorkplaceData UpdateWorkplaceData(float factor, WorkplaceData workplaceData, ref RealisticDensityData realisticDensityData)
+        public static WorkplaceData UpdateWorkplaceData(float factor, WorkplaceData workplaceData, ref DefaultData realisticDensityData)
         {
             WorkplaceData updatedWorkplaceData = workplaceData;
             realisticDensityData.workplaceData_MaxWorkers = workplaceData.m_MaxWorkers;
