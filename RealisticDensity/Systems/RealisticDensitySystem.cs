@@ -55,8 +55,8 @@ namespace RealisticDensity.Systems
             UpdateHighOfficesQuery updateHighOfficesQuery = new();
             m_UpdateHighOfficesJobQuery = GetEntityQuery(updateHighOfficesQuery.Query);
 
-            RequireAnyForUpdate(m_UpdateCityServicesJobQuery, m_UpdateSpawnablesJobQuery);
-            Mod.Instance.Log.DebugFormat("System created.");
+            RequireAnyForUpdate(m_UpdateCityServicesJobQuery, m_UpdateSpawnablesJobQuery, m_UpdateHighOfficesJobQuery);
+            Mod.Instance.Log.Info("System created.");
         }
 
         protected override void OnGameLoadingComplete(Purpose purpose, GameMode mode)
