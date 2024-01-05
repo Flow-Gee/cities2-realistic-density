@@ -37,7 +37,7 @@ namespace RealisticDensity.Jobs
                     ],
                     None =
                     [
-                        ComponentType.ReadOnly<DefaultData>(),
+                        ComponentType.Exclude<DefaultData>(),
                         ComponentType.Exclude<Deleted>(),
                         ComponentType.Exclude<Temp>(),
                     ],

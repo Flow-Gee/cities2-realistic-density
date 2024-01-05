@@ -38,7 +38,7 @@ namespace RealisticDensity.Jobs
                     ],
                     None =
                     [
-                        ComponentType.ReadOnly<DefaultData>(),
+                        ComponentType.Exclude<DefaultData>(),
                         ComponentType.Exclude<Deleted>(),
                         ComponentType.Exclude<Temp>(),
                     ],
@@ -102,80 +102,78 @@ namespace RealisticDensity.Jobs
             {
                 Entity entity = entities[i];
                 DefaultData realisticDensityData = new();
-                if (WorkplaceDataLookup.TryGetComponent(entity, out WorkplaceData workplaceData))
+                WorkplaceData workplaceData = WorkplaceDataLookup[entity];
+                
+                // Industrial buildings && low offices only
+                if (settings.IndustriesEnabled && IsIndustrialCompany(entity, out IndustrialProcessData industrialProcessData))
                 {
-                    // Industrial buildings && low offices only
-                    if (settings.IndustriesEnabled && IsIndustrialCompany(entity, out IndustrialProcessData industrialProcessData))
+                    bool isOffice = IsOffice(industrialProcessData);
+                    if (isOffice && !settings.OfficesEnabled)
                     {
-                        bool isOffice = IsOffice(industrialProcessData);
-                        if (isOffice && !settings.OfficesEnabled)
-                        {
-                            continue;
-                        }
-
-                        float workforceFactor = isOffice ? settings.OfficesFactor : ExtractorCompanyDataLookup.HasComponent(entity) ? settings.IndustryExtractorFactor : settings.IndustryProcessingFactor;
-
-                        var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(workforceFactor, workplaceData, ref realisticDensityData);
-                        Ecb.SetComponent(i, entity, updatedWorkplaceData);
-
-                        IndustrialProcessData updatedIndustrialProcessData = industrialProcessData;
-
-                        realisticDensityData.industrialProcessData_MaxWorkersPerCell = industrialProcessData.m_MaxWorkersPerCell;
-                        float maxWorkersPerCellfactor = CommonHelper.CalculateProductionFactor(workforceFactor, industrialProcessData.m_MaxWorkersPerCell);
-                        updatedIndustrialProcessData.m_MaxWorkersPerCell += Calc.DecimalFloat(maxWorkersPerCellfactor);
-
-                        realisticDensityData.industrialProcessData_WorkPerUnit = industrialProcessData.m_WorkPerUnit;
-                        float workPerUnitFactor = CommonHelper.CalculateProductionFactor(workforceFactor, industrialProcessData.m_WorkPerUnit);
-                        updatedIndustrialProcessData.m_WorkPerUnit += (int)math.round(workPerUnitFactor);
-
-                        Ecb.SetComponent(i, entity, updatedIndustrialProcessData);
-
-                        if (settings.IndustryIncreaseStorageCapacity && StorageLimitDataLookup.TryGetComponent(entity, out StorageLimitData storageLimitData))
-                        {
-                            StorageLimitData updatedStorageLimitData = storageLimitData;
-
-                            realisticDensityData.storageLimitData_limit = storageLimitData.m_Limit;
-                            float storageLimitFactor = CommonHelper.CalculateProductionFactor(workforceFactor, storageLimitData.m_Limit);
-                            updatedStorageLimitData.m_Limit += (int)math.round(storageLimitFactor);
-
-                            Ecb.SetComponent(i, entity, updatedStorageLimitData);
-                        }
-
-                        if (TransportCompanyDataLookup.TryGetComponent(entity, out TransportCompanyData transportCompanyData))
-                        {
-                            TransportCompanyData updatedTransportCompanyData = transportCompanyData;
-
-                            realisticDensityData.transportCompanyData_MaxTransports = transportCompanyData.m_MaxTransports;
-                            float maxTransportsFactor = CommonHelper.CalculateProductionFactor(workforceFactor, transportCompanyData.m_MaxTransports);
-                            updatedTransportCompanyData.m_MaxTransports += (int)math.round(maxTransportsFactor);
-
-                            Ecb.SetComponent(i, entity, updatedTransportCompanyData);
-                        }
-
-                        Ecb.AddComponent(i, entity, realisticDensityData);
+                        continue;
                     }
 
-                    // Commercial buildings only
-                    if (settings.CommercialsEnabled && IsCommercialCompany(entity, out ServiceCompanyData serviceCompanyData))
+                    float workforceFactor = isOffice ? settings.OfficesFactor : ExtractorCompanyDataLookup.HasComponent(entity) ? settings.IndustryExtractorFactor : settings.IndustryProcessingFactor;
+
+                    var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(workforceFactor, workplaceData, ref realisticDensityData);
+                    Ecb.SetComponent(i, entity, updatedWorkplaceData);
+
+                    IndustrialProcessData updatedIndustrialProcessData = industrialProcessData;
+
+                    realisticDensityData.industrialProcessData_MaxWorkersPerCell = industrialProcessData.m_MaxWorkersPerCell;
+                    float maxWorkersPerCellfactor = CommonHelper.CalculateProductionFactor(workforceFactor, industrialProcessData.m_MaxWorkersPerCell);
+                    updatedIndustrialProcessData.m_MaxWorkersPerCell += Calc.DecimalFloat(maxWorkersPerCellfactor);
+
+                    realisticDensityData.industrialProcessData_WorkPerUnit = industrialProcessData.m_WorkPerUnit;
+                    float workPerUnitFactor = CommonHelper.CalculateProductionFactor(workforceFactor, industrialProcessData.m_WorkPerUnit);
+                    updatedIndustrialProcessData.m_WorkPerUnit += (int)math.round(workPerUnitFactor);
+
+                    Ecb.SetComponent(i, entity, updatedIndustrialProcessData);
+
+                    if (settings.IndustryIncreaseStorageCapacity && StorageLimitDataLookup.TryGetComponent(entity, out StorageLimitData storageLimitData))
                     {
-                        float workforceFactor = WorkforceFactors.Commercial.High;
-                        var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(workforceFactor, workplaceData, ref realisticDensityData);
-                        Ecb.SetComponent(i, entity, updatedWorkplaceData);
+                        StorageLimitData updatedStorageLimitData = storageLimitData;
 
-                        ServiceCompanyData updatedServiceCompanyData = serviceCompanyData;
+                        realisticDensityData.storageLimitData_limit = storageLimitData.m_Limit;
+                        float storageLimitFactor = CommonHelper.CalculateProductionFactor(workforceFactor, storageLimitData.m_Limit);
+                        updatedStorageLimitData.m_Limit += (int)math.round(storageLimitFactor);
 
-                        realisticDensityData.serviceCompanyData_MaxWorkersPerCell = serviceCompanyData.m_MaxWorkersPerCell;
-                        float maxWorkersPerCellFactor = CommonHelper.CalculateProductionFactor(workforceFactor, serviceCompanyData.m_MaxWorkersPerCell);
-                        updatedServiceCompanyData.m_MaxWorkersPerCell += Calc.DecimalFloat(maxWorkersPerCellFactor);
+                        Ecb.SetComponent(i, entity, updatedStorageLimitData);
+                    }
 
-                        realisticDensityData.serviceCompanyData_WorkPerUnit = serviceCompanyData.m_WorkPerUnit;
-                        float workPerUnitFactor = CommonHelper.CalculateProductionFactor(workforceFactor, serviceCompanyData.m_WorkPerUnit);
-                        updatedServiceCompanyData.m_WorkPerUnit += (int)math.round(workPerUnitFactor);
+                    if (TransportCompanyDataLookup.TryGetComponent(entity, out TransportCompanyData transportCompanyData))
+                    {
+                        TransportCompanyData updatedTransportCompanyData = transportCompanyData;
 
-                        Ecb.SetComponent(i, entity, updatedServiceCompanyData);
-                        Ecb.AddComponent(i, entity, realisticDensityData);
+                        realisticDensityData.transportCompanyData_MaxTransports = transportCompanyData.m_MaxTransports;
+                        float maxTransportsFactor = CommonHelper.CalculateProductionFactor(workforceFactor, transportCompanyData.m_MaxTransports);
+                        updatedTransportCompanyData.m_MaxTransports += (int)math.round(maxTransportsFactor);
+
+                        Ecb.SetComponent(i, entity, updatedTransportCompanyData);
                     }
                 }
+
+                // Commercial buildings only
+                if (settings.CommercialsEnabled && IsCommercialCompany(entity, out ServiceCompanyData serviceCompanyData))
+                {
+                    float workforceFactor = WorkforceFactors.Commercial.High;
+                    var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(workforceFactor, workplaceData, ref realisticDensityData);
+                    Ecb.SetComponent(i, entity, updatedWorkplaceData);
+
+                    ServiceCompanyData updatedServiceCompanyData = serviceCompanyData;
+
+                    realisticDensityData.serviceCompanyData_MaxWorkersPerCell = serviceCompanyData.m_MaxWorkersPerCell;
+                    float maxWorkersPerCellFactor = CommonHelper.CalculateProductionFactor(workforceFactor, serviceCompanyData.m_MaxWorkersPerCell);
+                    updatedServiceCompanyData.m_MaxWorkersPerCell += Calc.DecimalFloat(maxWorkersPerCellFactor);
+
+                    realisticDensityData.serviceCompanyData_WorkPerUnit = serviceCompanyData.m_WorkPerUnit;
+                    float workPerUnitFactor = CommonHelper.CalculateProductionFactor(workforceFactor, serviceCompanyData.m_WorkPerUnit);
+                    updatedServiceCompanyData.m_WorkPerUnit += (int)math.round(workPerUnitFactor);
+
+                    Ecb.SetComponent(i, entity, updatedServiceCompanyData);
+                }
+
+                Ecb.AddComponent(i, entity, realisticDensityData);
             }
         }
 
