@@ -32,8 +32,15 @@ namespace RealisticDensity.Jobs
                         ComponentType.ReadOnly<SchoolData>(),
                         ComponentType.ReadOnly<HospitalData>(),
                         ComponentType.ReadOnly<PoliceStationData>(),
+                        ComponentType.ReadOnly<PrisonData>(),
                         ComponentType.ReadOnly<FireStationData>(),
                         ComponentType.ReadOnly<CargoTransportStationData>(),
+                        ComponentType.ReadOnly<TransportDepotData>(),
+                        ComponentType.ReadOnly<GarbageFacilityData>(),
+                        ComponentType.ReadOnly<DeathcareFacilityData>(),
+                        ComponentType.ReadOnly<PublicTransportStationData>(),
+                        ComponentType.ReadOnly<MaintenanceDepotData>(),
+                        ComponentType.ReadOnly<PostFacilityData>(),
                     ],
                     None =
                     [
@@ -57,8 +64,15 @@ namespace RealisticDensity.Jobs
             SchoolDataLookup = state.GetComponentLookup<SchoolData>(false);
             HospitalDataLookup = state.GetComponentLookup<HospitalData>(false);
             PoliceStationDataLookup = state.GetComponentLookup<PoliceStationData>(false);
+            PrisonDataLookup = state.GetComponentLookup<PrisonData>(false);
             FireStationDataLookup = state.GetComponentLookup<FireStationData>(false);
             CargoTransportStationDataLookup = state.GetComponentLookup<CargoTransportStationData>(false);
+            TransportDepotDataLookup = state.GetComponentLookup<TransportDepotData>(false);
+            GarbageFacilityDataLookup = state.GetComponentLookup<GarbageFacilityData>(false);
+            DeathcareFacilityDataLookup = state.GetComponentLookup<DeathcareFacilityData>(false);
+            PublicTransportStationDataLookup = state.GetComponentLookup<PublicTransportStationData>(false);
+            MaintenanceDepotDataLookup = state.GetComponentLookup<MaintenanceDepotData>(false);
+            PostFacilityDataLookup = state.GetComponentLookup<PostFacilityData>(false);
         }
 
         [ReadOnly]
@@ -69,8 +83,15 @@ namespace RealisticDensity.Jobs
         public ComponentLookup<SchoolData> SchoolDataLookup;
         public ComponentLookup<HospitalData> HospitalDataLookup;
         public ComponentLookup<PoliceStationData> PoliceStationDataLookup;
+        public ComponentLookup<PrisonData> PrisonDataLookup;
         public ComponentLookup<FireStationData> FireStationDataLookup;
         public ComponentLookup<CargoTransportStationData> CargoTransportStationDataLookup;
+        public ComponentLookup<TransportDepotData> TransportDepotDataLookup;
+        public ComponentLookup<GarbageFacilityData> GarbageFacilityDataLookup;
+        public ComponentLookup<DeathcareFacilityData> DeathcareFacilityDataLookup;
+        public ComponentLookup<PublicTransportStationData> PublicTransportStationDataLookup;
+        public ComponentLookup<MaintenanceDepotData> MaintenanceDepotDataLookup;
+        public ComponentLookup<PostFacilityData> PostFacilityDataLookup;
     }
 
     public struct UpdateCityServicesJob : IJobChunk
@@ -83,8 +104,15 @@ namespace RealisticDensity.Jobs
         public ComponentLookup<SchoolData> SchoolDataLookup;
         public ComponentLookup<HospitalData> HospitalDataLookup;
         public ComponentLookup<PoliceStationData> PoliceStationDataLookup;
+        public ComponentLookup<PrisonData> PrisonDataLookup;
         public ComponentLookup<FireStationData> FireStationDataLookup;
         public ComponentLookup<CargoTransportStationData> CargoTransportStationDataLookup;
+        public ComponentLookup<TransportDepotData> TransportDepotDataLookup;
+        public ComponentLookup<GarbageFacilityData> GarbageFacilityDataLookup;
+        public ComponentLookup<DeathcareFacilityData> DeathcareFacilityDataLookup;
+        public ComponentLookup<PublicTransportStationData> PublicTransportStationDataLookup;
+        public ComponentLookup<MaintenanceDepotData> MaintenanceDepotDataLookup;
+        public ComponentLookup<PostFacilityData> PostFacilityDataLookup;
 
         public void Execute(in ArchetypeChunk chunk,
             int unfilteredChunkIndex,
@@ -96,17 +124,17 @@ namespace RealisticDensity.Jobs
             while (enumerator.NextEntityIndex(out int entityIndex))
             {
                 Entity entity = entities[entityIndex];
-                DefaultData realisticDensityData = new();
-
                 if (WorkplaceDataLookup.TryGetComponent(entity, out WorkplaceData workplaceData))
                 {
-                    UpdateWorkplaceData(entity, workplaceData, ref realisticDensityData, entityIndex);
+                    UpdateWorkplaceData(entity, workplaceData, entityIndex);
                 }
             }
         }
 
-        private void UpdateWorkplaceData(Entity entity, WorkplaceData workplaceData, ref DefaultData realisticDensityData, int entityIndex)
+        private void UpdateWorkplaceData(Entity entity, WorkplaceData workplaceData, int entityIndex)
         {
+            DefaultData realisticDensityData = new();
+
             // Power plants need a lot more workers for more realism
             if (PowerPlantDataLookup.HasComponent(entity))
             {
@@ -122,28 +150,59 @@ namespace RealisticDensity.Jobs
                 var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.School.Medium, workplaceData, ref realisticDensityData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
-
             else if (HospitalDataLookup.HasComponent(entity))
             {
                 var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.Hospital.Medium, workplaceData, ref realisticDensityData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
-
             else if (PoliceStationDataLookup.HasComponent(entity))
             {
                 var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.PoliceStation.Medium, workplaceData, ref realisticDensityData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
-
+            else if (PrisonDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.Prison.Medium, workplaceData, ref realisticDensityData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
             else if (FireStationDataLookup.HasComponent(entity))
             {
                 var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.FireStation.Medium, workplaceData, ref realisticDensityData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
-
             else if (CargoTransportStationDataLookup.HasComponent(entity))
             {
                 var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.CargoTransportStation.Medium, workplaceData, ref realisticDensityData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (TransportDepotDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.TransportDepot.Medium, workplaceData, ref realisticDensityData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (GarbageFacilityDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.GarbageFacility.Medium, workplaceData, ref realisticDensityData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (DeathcareFacilityDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.DeathcareFacility.Medium, workplaceData, ref realisticDensityData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (PublicTransportStationDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.PublicTransportStation.Medium, workplaceData, ref realisticDensityData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (MaintenanceDepotDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.MaintenanceDepot.Medium, workplaceData, ref realisticDensityData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (PostFacilityDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.PostFacility.Medium, workplaceData, ref realisticDensityData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
 

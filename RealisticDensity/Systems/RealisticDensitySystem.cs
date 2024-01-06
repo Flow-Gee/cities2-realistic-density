@@ -85,8 +85,15 @@ namespace RealisticDensity.Systems
                     SchoolDataLookup = m_UpdateCityServicesJobTypeHandle.SchoolDataLookup,
                     HospitalDataLookup = m_UpdateCityServicesJobTypeHandle.HospitalDataLookup,
                     PoliceStationDataLookup = m_UpdateCityServicesJobTypeHandle.PoliceStationDataLookup,
+                    PrisonDataLookup = m_UpdateCityServicesJobTypeHandle.PrisonDataLookup,
                     FireStationDataLookup = m_UpdateCityServicesJobTypeHandle.FireStationDataLookup,
-                    CargoTransportStationDataLookup = m_UpdateCityServicesJobTypeHandle.CargoTransportStationDataLookup
+                    CargoTransportStationDataLookup = m_UpdateCityServicesJobTypeHandle.CargoTransportStationDataLookup,
+                    TransportDepotDataLookup = m_UpdateCityServicesJobTypeHandle.TransportDepotDataLookup,
+                    GarbageFacilityDataLookup = m_UpdateCityServicesJobTypeHandle.GarbageFacilityDataLookup,
+                    DeathcareFacilityDataLookup = m_UpdateCityServicesJobTypeHandle.DeathcareFacilityDataLookup,
+                    PublicTransportStationDataLookup = m_UpdateCityServicesJobTypeHandle.PublicTransportStationDataLookup,
+                    MaintenanceDepotDataLookup = m_UpdateCityServicesJobTypeHandle.MaintenanceDepotDataLookup,
+                    PostFacilityDataLookup = m_UpdateCityServicesJobTypeHandle.PostFacilityDataLookup,
                 };
                 Dependency = updateCityServicesJob.Schedule(m_UpdateCityServicesJobQuery, Dependency);
                 Barrier.AddJobHandleForProducer(Dependency);

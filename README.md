@@ -6,6 +6,14 @@ Why a power plant only has 10 employees or a high school with 2000 students only
 **Then this mod is just right for you.**
 
 ## Updates
+- **v0.10.0 Added support for more city buildings**
+	- Public Transportation
+	- Maintenance Depots
+	- Transport Depots
+	- Prisons
+	- Deathcare Facilities
+	- Garbage Facilities
+	- Post Facilities
 - **v0.9.1 Fix spawnables job infinite loop log spam**
 - **v0.9.0 Fix save game serialization**
 - **v0.8.0 Failed attempt to fix serialization (sorry)**
