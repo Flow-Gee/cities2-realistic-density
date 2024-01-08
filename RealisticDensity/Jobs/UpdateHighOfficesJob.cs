@@ -44,7 +44,7 @@ namespace RealisticDensity.Jobs
         public void AssignHandles(ref SystemState state)
         {
             EntityTypeHandle = state.GetEntityTypeHandle();
-            BuildingPropertyDataLookup = state.GetComponentLookup<BuildingPropertyData>(false);
+            BuildingPropertyDataLookup = state.GetComponentLookup<BuildingPropertyData>();
         }
 
         [ReadOnly]
@@ -71,17 +71,16 @@ namespace RealisticDensity.Jobs
             {
                 Entity entity = entities[i];
                 DefaultData realisticDensityData = new();
-                if (BuildingPropertyDataLookup.TryGetComponent(entity, out BuildingPropertyData buildingPropertyData))
-                {
-                    float workforceFactor = settings.OfficesFactor;
+                BuildingPropertyData buildingPropertyData = BuildingPropertyDataLookup[entity];
 
-                    BuildingPropertyData updatedBuildingPropertyData = buildingPropertyData;
-                    realisticDensityData.buildingPropertyData_SpaceMultiplier = buildingPropertyData.m_SpaceMultiplier;
-                    updatedBuildingPropertyData.m_SpaceMultiplier *= workforceFactor;
+                float workforceFactor = settings.OfficesFactor;
 
-                    Ecb.SetComponent(i, entity, updatedBuildingPropertyData);
-                    Ecb.AddComponent(i, entity, realisticDensityData);
-                }
+                BuildingPropertyData updatedBuildingPropertyData = buildingPropertyData;
+                realisticDensityData.buildingPropertyData_SpaceMultiplier = buildingPropertyData.m_SpaceMultiplier;
+                updatedBuildingPropertyData.m_SpaceMultiplier *= workforceFactor;
+
+                Ecb.SetComponent(i, entity, updatedBuildingPropertyData);
+                Ecb.AddComponent(i, entity, realisticDensityData);
             }
         }
     }

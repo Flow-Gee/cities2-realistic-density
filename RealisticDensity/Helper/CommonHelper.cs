@@ -1,5 +1,4 @@
 ﻿using Game.Prefabs;
-using RealisticDensity.Prefabs;
 using RealisticDensity.Systems;
 using Unity.Mathematics;
 
@@ -12,10 +11,9 @@ namespace RealisticDensity.Helper
             return (of * factor - of) / RealisticDensitySystem.kProductionFactor;
         }
 
-        public static WorkplaceData UpdateWorkplaceData(float factor, WorkplaceData workplaceData, ref DefaultData realisticDensityData)
+        public static WorkplaceData UpdateWorkplaceData(float factor, WorkplaceData workplaceData)
         {
             WorkplaceData updatedWorkplaceData = workplaceData;
-            realisticDensityData.workplaceData_MaxWorkers = workplaceData.m_MaxWorkers;
             updatedWorkplaceData.m_MaxWorkers = (int)math.round(updatedWorkplaceData.m_MaxWorkers * factor);
 
             return updatedWorkplaceData;

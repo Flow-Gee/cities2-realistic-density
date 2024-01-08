@@ -18,6 +18,7 @@ namespace RealisticDensity.Systems
 
         // Workforce is a third of the production outcome calculation for spawnable entities like commercial, industrial and offices
         readonly public static int kProductionFactor = 3;
+        readonly public static float kWorkPerUnitFactor = 1.5f;
 
         private static readonly string AssemblyPath = Path.GetDirectoryName(typeof(RealisticDensitySystem).Assembly.Location);
         public static string UIPath = AssemblyPath + "\\UI\\";
@@ -28,8 +29,10 @@ namespace RealisticDensity.Systems
         public static RealisticDensitySettings Settings;
         public bool m_LocalSettingsLoaded = false;
 
-        private UpdateSpawnablesTypeHandle m_UpdateSpawnablesJobTypeHandle;
-        private EntityQuery m_UpdateSpawnablesJobQuery;
+        private UpdateCommercialBuildingsTypeHandle m_UpdateCommercialBuildingsTypeHandle;
+        private EntityQuery m_UpdateCommercialBuildingsQuery;
+        private UpdateIndustryBuildingsTypeHandle m_UpdateIndustryBuildingsTypeHandle;
+        private EntityQuery m_UpdateIndustryBuildingsQuery;
         private UpdateCityServicesTypeHandle m_UpdateCityServicesJobTypeHandle;
         private EntityQuery m_UpdateCityServicesJobQuery;
         private UpdateHighOfficesTypeHandle m_UpdateHighOfficesJobTypeHandle;
@@ -50,13 +53,15 @@ namespace RealisticDensity.Systems
             // Job Queries
             UpdateCityServicesQuery updateCityServicesQuery = new();
             m_UpdateCityServicesJobQuery = GetEntityQuery(updateCityServicesQuery.Query);
-            UpdateSpawnablesQuery updateSpawnablesQuery = new();
-            m_UpdateSpawnablesJobQuery = GetEntityQuery(updateSpawnablesQuery.Query);
+            UpdateCommercialBuildingsQuery updateCommercialBuildingsQuery = new();
+            m_UpdateCommercialBuildingsQuery = GetEntityQuery(updateCommercialBuildingsQuery.Query);
+            UpdateIndustryBuildingsQuery updateIndustryBuildingsQuery = new();
+            m_UpdateIndustryBuildingsQuery = GetEntityQuery(updateIndustryBuildingsQuery.Query);
             UpdateHighOfficesQuery updateHighOfficesQuery = new();
             m_UpdateHighOfficesJobQuery = GetEntityQuery(updateHighOfficesQuery.Query);
 
-            RequireAnyForUpdate(m_UpdateCityServicesJobQuery, m_UpdateSpawnablesJobQuery, m_UpdateHighOfficesJobQuery);
-            Mod.Instance.Log.Info("System created.");
+            RequireAnyForUpdate(m_UpdateCityServicesJobQuery, m_UpdateCommercialBuildingsQuery, m_UpdateIndustryBuildingsQuery, m_UpdateHighOfficesJobQuery);
+            UnityEngine.Debug.Log("[RealisticDensity] System created.");
         }
 
         protected override void OnGameLoadingComplete(Purpose purpose, GameMode mode)
@@ -74,7 +79,7 @@ namespace RealisticDensity.Systems
 
             if (m_LocalSettings.Settings.CityServicesEnabled && !m_UpdateCityServicesJobQuery.IsEmptyIgnoreFilter)
             {
-                Mod.Instance.Log.Info("Run UpdateCityServicesJob");
+                UnityEngine.Debug.Log("[RealisticDensity] Run UpdateCityServicesJob");
                 m_UpdateCityServicesJobTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateCityServicesJob updateCityServicesJob = new()
                 {
@@ -99,30 +104,42 @@ namespace RealisticDensity.Systems
                 Barrier.AddJobHandleForProducer(Dependency);
             }
 
-            if (m_LocalSettings.Settings.SpawnablesEnabled && !m_UpdateSpawnablesJobQuery.IsEmptyIgnoreFilter)
+            if (m_LocalSettings.Settings.SpawnablesEnabled && m_LocalSettings.Settings.CommercialsEnabled && !m_UpdateCommercialBuildingsQuery.IsEmptyIgnoreFilter)
             {
-                Mod.Instance.Log.Info("Run UpdateSpawnablesJob");
-                m_UpdateSpawnablesJobTypeHandle.AssignHandles(ref CheckedStateRef);
-                UpdateSpawnablesJob updateSpawnablesJob = new()
+                UnityEngine.Debug.Log("[RealisticDensity] Run UpdateCommercialBuildingsJob");
+                m_UpdateCommercialBuildingsTypeHandle.AssignHandles(ref CheckedStateRef);
+                UpdateCommercialBuildingsJob updateCommercialBuildingsJob = new()
                 {
                     Ecb = Barrier.CreateCommandBuffer().AsParallelWriter(),
-                    EntityHandle = m_UpdateSpawnablesJobTypeHandle.EntityTypeHandle,
-                    WorkplaceDataLookup = m_UpdateSpawnablesJobTypeHandle.WorkplaceDataLookup,
-                    IndustrialProcessDataLookup = m_UpdateSpawnablesJobTypeHandle.IndustrialProcessDataLookup,
-                    IndustrialCompanyDataLookup = m_UpdateSpawnablesJobTypeHandle.IndustrialCompanyDataLookup,
-                    ExtractorCompanyDataLookup = m_UpdateSpawnablesJobTypeHandle.ExtractorCompanyDataLookup,
-                    CommercialCompanyDataLookup = m_UpdateSpawnablesJobTypeHandle.CommercialCompanyDataLookup,
-                    ServiceCompanyDataLookup = m_UpdateSpawnablesJobTypeHandle.ServiceCompanyDataLookup,
-                    StorageLimitDataLookup = m_UpdateSpawnablesJobTypeHandle.StorageLimitDataLookup,
-                    TransportCompanyDataLookup = m_UpdateSpawnablesJobTypeHandle.TransportCompanyDataLookup,
+                    EntityHandle = m_UpdateCommercialBuildingsTypeHandle.EntityTypeHandle,
+                    WorkplaceDataLookup = m_UpdateCommercialBuildingsTypeHandle.WorkplaceDataLookup,
+                    ServiceCompanyDataLookup = m_UpdateCommercialBuildingsTypeHandle.ServiceCompanyDataLookup,
                 };
-                Dependency = updateSpawnablesJob.Schedule(m_UpdateSpawnablesJobQuery, Dependency);
+                Dependency = updateCommercialBuildingsJob.Schedule(m_UpdateCommercialBuildingsQuery, Dependency);
+                Barrier.AddJobHandleForProducer(Dependency);
+            }
+
+            if (m_LocalSettings.Settings.SpawnablesEnabled && m_LocalSettings.Settings.IndustriesEnabled && !m_UpdateIndustryBuildingsQuery.IsEmptyIgnoreFilter)
+            {
+                UnityEngine.Debug.Log("[RealisticDensity] Run UpdateIndustryBuildingsJob");
+                m_UpdateIndustryBuildingsTypeHandle.AssignHandles(ref CheckedStateRef);
+                UpdateIndustryBuildingsJob updateIndustryBuildingsJob = new()
+                {
+                    Ecb = Barrier.CreateCommandBuffer().AsParallelWriter(),
+                    EntityHandle = m_UpdateIndustryBuildingsTypeHandle.EntityTypeHandle,
+                    WorkplaceDataLookup = m_UpdateIndustryBuildingsTypeHandle.WorkplaceDataLookup,
+                    IndustrialProcessDataLookup = m_UpdateIndustryBuildingsTypeHandle.IndustrialProcessDataLookup,
+                    ExtractorCompanyDataLookup = m_UpdateIndustryBuildingsTypeHandle.ExtractorCompanyDataLookup,
+                    StorageLimitDataLookup = m_UpdateIndustryBuildingsTypeHandle.StorageLimitDataLookup,
+                    TransportCompanyDataLookup = m_UpdateIndustryBuildingsTypeHandle.TransportCompanyDataLookup,
+                };
+                Dependency = updateIndustryBuildingsJob.Schedule(m_UpdateIndustryBuildingsQuery, Dependency);
                 Barrier.AddJobHandleForProducer(Dependency);
             }
 
             if (m_LocalSettings.Settings.OfficesEnabled && !m_UpdateHighOfficesJobQuery.IsEmptyIgnoreFilter)
             {
-                Mod.Instance.Log.Info("Run UpdateHighOfficesJob");
+                UnityEngine.Debug.Log("[RealisticDensity] Run UpdateHighOfficesJob");
                 m_UpdateHighOfficesJobTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateHighOfficesJob updateHighOfficesJob = new()
                 {
@@ -138,7 +155,7 @@ namespace RealisticDensity.Systems
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Mod.Instance.Log.Info("System destroyed.");
+            UnityEngine.Debug.Log("[RealisticDensity] System destroyed.");
 
         }
 
@@ -152,7 +169,7 @@ namespace RealisticDensity.Systems
             }
             catch (System.Exception e)
             {
-                Mod.Instance.Log.Error($"Error loading settings: {e.Message}");
+                UnityEngine.Debug.Log($"[RealisticDensity] Error loading settings: {e.Message}");
             }
         }
 
