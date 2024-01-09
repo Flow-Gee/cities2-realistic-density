@@ -1,6 +1,6 @@
 {
   "name": "RealisticDensity",
-  "version_number": "0.11.0",
+  "version_number": "0.12.0",
   "website_url": "https://github.com/89pleasure/cities2-realistic-density",
   "description": "Brings more density to town.",
   "dependencies": [

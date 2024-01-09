@@ -104,12 +104,10 @@ namespace RealisticDensity.Jobs
 
                 IndustrialProcessData updatedIndustrialProcessData = industrialProcessData;
                 realisticDensityData.industrialProcessData_MaxWorkersPerCell = industrialProcessData.m_MaxWorkersPerCell;
-                float maxWorkersPerCellfactor = CommonHelper.CalculateProductionFactor(workforceFactor, industrialProcessData.m_MaxWorkersPerCell);
-                updatedIndustrialProcessData.m_MaxWorkersPerCell += Calc.DecimalFloat(maxWorkersPerCellfactor);
+                updatedIndustrialProcessData.m_MaxWorkersPerCell += CommonHelper.MaxWorkersPerCellIncrease(workforceFactor, industrialProcessData.m_MaxWorkersPerCell);
 
                 realisticDensityData.industrialProcessData_WorkPerUnit = industrialProcessData.m_WorkPerUnit;
-                float workPerUnitFactor = CommonHelper.CalculateProductionFactor(workforceFactor, industrialProcessData.m_WorkPerUnit);
-                updatedIndustrialProcessData.m_WorkPerUnit += (int)math.round(workPerUnitFactor / 1.5f);
+                updatedIndustrialProcessData.m_WorkPerUnit += CommonHelper.WorkPerUnitIncrease(workforceFactor, industrialProcessData.m_WorkPerUnit);
 
                 Ecb.SetComponent(i, entity, updatedIndustrialProcessData);
 

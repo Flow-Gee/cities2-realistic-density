@@ -9,6 +9,7 @@ using Game.UI;
 using System.IO;
 using Colossal.Serialization.Entities;
 using ExtendedTooltip.Settings;
+using Game.Prefabs;
 
 namespace RealisticDensity.Systems
 {
@@ -18,12 +19,12 @@ namespace RealisticDensity.Systems
 
         // Workforce is a third of the production outcome calculation for spawnable entities like commercial, industrial and offices
         readonly public static int kProductionFactor = 3;
-        readonly public static float kWorkPerUnitFactor = 1.5f;
 
         private static readonly string AssemblyPath = Path.GetDirectoryName(typeof(RealisticDensitySystem).Assembly.Location);
         public static string UIPath = AssemblyPath + "\\UI\\";
 
         private EndFrameBarrier Barrier;
+        private PrefabSystem m_PrefabSystem;
 
         public LocalSettings m_LocalSettings;
         public static RealisticDensitySettings Settings;
@@ -61,7 +62,7 @@ namespace RealisticDensity.Systems
             m_UpdateHighOfficesJobQuery = GetEntityQuery(updateHighOfficesQuery.Query);
 
             RequireAnyForUpdate(m_UpdateCityServicesJobQuery, m_UpdateCommercialBuildingsQuery, m_UpdateIndustryBuildingsQuery, m_UpdateHighOfficesJobQuery);
-            UnityEngine.Debug.Log("[RealisticDensity] System created.");
+            Mod.DebugLog("System created.");
         }
 
         protected override void OnGameLoadingComplete(Purpose purpose, GameMode mode)
@@ -79,12 +80,13 @@ namespace RealisticDensity.Systems
 
             if (m_LocalSettings.Settings.CityServicesEnabled && !m_UpdateCityServicesJobQuery.IsEmptyIgnoreFilter)
             {
-                UnityEngine.Debug.Log("[RealisticDensity] Run UpdateCityServicesJob");
+                Mod.DebugLog("Run UpdateCityServicesJob");
                 m_UpdateCityServicesJobTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateCityServicesJob updateCityServicesJob = new()
                 {
                     Ecb = Barrier.CreateCommandBuffer().AsParallelWriter(),
                     EntityTypeHandle = m_UpdateCityServicesJobTypeHandle.EntityTypeHandle,
+                    BuildingDataLookup = m_UpdateCityServicesJobTypeHandle.BuildingDataLookup,
                     WorkplaceDataLookup = m_UpdateCityServicesJobTypeHandle.WorkplaceDataLookup,
                     PowerPlantDataLookup = m_UpdateCityServicesJobTypeHandle.PowerPlantDataLookup,
                     SchoolDataLookup = m_UpdateCityServicesJobTypeHandle.SchoolDataLookup,
@@ -99,6 +101,11 @@ namespace RealisticDensity.Systems
                     PublicTransportStationDataLookup = m_UpdateCityServicesJobTypeHandle.PublicTransportStationDataLookup,
                     MaintenanceDepotDataLookup = m_UpdateCityServicesJobTypeHandle.MaintenanceDepotDataLookup,
                     PostFacilityDataLookup = m_UpdateCityServicesJobTypeHandle.PostFacilityDataLookup,
+                    AdminBuildingDataLookup = m_UpdateCityServicesJobTypeHandle.AdminBuildingDataLookup,
+                    WelfareOfficeDataLookup = m_UpdateCityServicesJobTypeHandle.WelfareOfficeDataLookup,
+                    ResearchFacilityDataLookup = m_UpdateCityServicesJobTypeHandle.ResearchFacilityDataLookup,
+                    TelecomFacilityDataLookup = m_UpdateCityServicesJobTypeHandle.TelecomFacilityDataLookup,
+                    ParkDataLookup = m_UpdateCityServicesJobTypeHandle.ParkDataLookup,
                 };
                 Dependency = updateCityServicesJob.Schedule(m_UpdateCityServicesJobQuery, Dependency);
                 Barrier.AddJobHandleForProducer(Dependency);
@@ -106,7 +113,7 @@ namespace RealisticDensity.Systems
 
             if (m_LocalSettings.Settings.SpawnablesEnabled && m_LocalSettings.Settings.CommercialsEnabled && !m_UpdateCommercialBuildingsQuery.IsEmptyIgnoreFilter)
             {
-                UnityEngine.Debug.Log("[RealisticDensity] Run UpdateCommercialBuildingsJob");
+                Mod.DebugLog("Run UpdateCommercialBuildingsJob");
                 m_UpdateCommercialBuildingsTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateCommercialBuildingsJob updateCommercialBuildingsJob = new()
                 {
@@ -121,7 +128,7 @@ namespace RealisticDensity.Systems
 
             if (m_LocalSettings.Settings.SpawnablesEnabled && m_LocalSettings.Settings.IndustriesEnabled && !m_UpdateIndustryBuildingsQuery.IsEmptyIgnoreFilter)
             {
-                UnityEngine.Debug.Log("[RealisticDensity] Run UpdateIndustryBuildingsJob");
+                Mod.DebugLog("Run UpdateIndustryBuildingsJob");
                 m_UpdateIndustryBuildingsTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateIndustryBuildingsJob updateIndustryBuildingsJob = new()
                 {
@@ -139,7 +146,7 @@ namespace RealisticDensity.Systems
 
             if (m_LocalSettings.Settings.OfficesEnabled && !m_UpdateHighOfficesJobQuery.IsEmptyIgnoreFilter)
             {
-                UnityEngine.Debug.Log("[RealisticDensity] Run UpdateHighOfficesJob");
+                Mod.DebugLog("Run UpdateHighOfficesJob");
                 m_UpdateHighOfficesJobTypeHandle.AssignHandles(ref CheckedStateRef);
                 UpdateHighOfficesJob updateHighOfficesJob = new()
                 {

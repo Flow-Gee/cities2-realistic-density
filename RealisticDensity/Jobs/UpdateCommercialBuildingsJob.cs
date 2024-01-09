@@ -2,7 +2,6 @@
 using Game.Companies;
 using Game.Prefabs;
 using Game.Tools;
-using RealisticDensity.Common;
 using RealisticDensity.Helper;
 using RealisticDensity.Prefabs;
 using RealisticDensity.Systems;
@@ -10,7 +9,6 @@ using System.Runtime.CompilerServices;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 
 namespace RealisticDensity.Jobs
 {
@@ -80,33 +78,23 @@ namespace RealisticDensity.Jobs
                 WorkplaceData workplaceData = WorkplaceDataLookup[entity];
                 ServiceCompanyData serviceCompanyData = ServiceCompanyDataLookup[entity];
 
-                float workforceFactor = WorkforceFactors.Commercial.High;
+                float workforceFactor = WorkforceFactors.Commercial.Medium;
                 var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(workforceFactor, workplaceData);
                 Ecb.SetComponent(i, entity, updatedWorkplaceData);
 
                 ServiceCompanyData updatedServiceCompanyData = serviceCompanyData;
 
                 realisticDensityData.serviceCompanyData_MaxWorkersPerCell = serviceCompanyData.m_MaxWorkersPerCell;
-                updatedServiceCompanyData.m_MaxWorkersPerCell += CalcMaxWorkersPerCell(workforceFactor, serviceCompanyData.m_MaxWorkersPerCell);
+                updatedServiceCompanyData.m_MaxWorkersPerCell += CommonHelper.MaxWorkersPerCellIncrease(workforceFactor, serviceCompanyData.m_MaxWorkersPerCell);
 
                 realisticDensityData.serviceCompanyData_WorkPerUnit = serviceCompanyData.m_WorkPerUnit;
-                updatedServiceCompanyData.m_WorkPerUnit += CalcWorkPerUnit(workforceFactor, serviceCompanyData.m_WorkPerUnit);
+                updatedServiceCompanyData.m_WorkPerUnit += CommonHelper.WorkPerUnitIncrease(workforceFactor, serviceCompanyData.m_WorkPerUnit);
 
                 Ecb.SetComponent(i, entity, updatedServiceCompanyData);
 
                 realisticDensityData.workplaceData_MaxWorkers = workplaceData.m_MaxWorkers;
                 Ecb.AddComponent(i, entity, realisticDensityData);
             }
-        }
-
-        private readonly float CalcMaxWorkersPerCell(float workforceFactor, float maxWorkersPerCell)
-        {
-            return Calc.DecimalFloat(CommonHelper.CalculateProductionFactor(workforceFactor, maxWorkersPerCell));
-        }
-
-        private readonly int CalcWorkPerUnit(float workforceFactor, int workPerUnit)
-        {
-            return (int)math.round(CommonHelper.CalculateProductionFactor(workforceFactor, workPerUnit) / 1.5f);
         }
     }
 }

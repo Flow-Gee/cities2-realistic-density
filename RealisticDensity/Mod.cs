@@ -8,6 +8,7 @@ namespace RealisticDensity
     public sealed class Mod : IMod
     {
         public const string Name = MyPluginInfo.PLUGIN_NAME;
+        public const string Version = MyPluginInfo.PLUGIN_VERSION;
         public static Mod Instance { get; set; }
         internal ILog Log { get; private set; }
         public void OnLoad()
@@ -34,6 +35,11 @@ namespace RealisticDensity
         {
             Log.Info("Mod disposed.");
             Instance = null;
+        }
+
+        public static void DebugLog(string message)
+        {
+            UnityEngine.Debug.Log($"[{Mod.Name} | v{Mod.Version}] {message}");
         }
     }
 }

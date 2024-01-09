@@ -9,6 +9,8 @@ using System.Runtime.CompilerServices;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
+using UnityEngine;
 
 namespace RealisticDensity.Jobs
 {
@@ -25,6 +27,7 @@ namespace RealisticDensity.Jobs
                     All =
                     [
                         ComponentType.ReadOnly<WorkplaceData>(),
+                        ComponentType.ReadOnly<BuildingData>(),
                         ComponentType.ReadOnly<ServiceObjectData>(),
                     ],
                     Any =
@@ -42,6 +45,11 @@ namespace RealisticDensity.Jobs
                         ComponentType.ReadOnly<PublicTransportStationData>(),
                         ComponentType.ReadOnly<MaintenanceDepotData>(),
                         ComponentType.ReadOnly<PostFacilityData>(),
+                        ComponentType.ReadOnly<AdminBuildingData>(),
+                        ComponentType.ReadOnly<WelfareOfficeData>(),
+                        ComponentType.ReadOnly<ResearchFacilityData>(),
+                        ComponentType.ReadOnly<TelecomFacilityData>(),
+                        ComponentType.ReadOnly<ParkData>(),
                     ],
                     None =
                     [
@@ -60,25 +68,33 @@ namespace RealisticDensity.Jobs
         public void AssignHandles(ref SystemState state)
         {
             EntityTypeHandle = state.GetEntityTypeHandle();
-            WorkplaceDataLookup = state.GetComponentLookup<WorkplaceData>(false);
-            PowerPlantDataLookup = state.GetComponentLookup<PowerPlantData>(false);
-            SchoolDataLookup = state.GetComponentLookup<SchoolData>(false);
-            HospitalDataLookup = state.GetComponentLookup<HospitalData>(false);
-            PoliceStationDataLookup = state.GetComponentLookup<PoliceStationData>(false);
-            PrisonDataLookup = state.GetComponentLookup<PrisonData>(false);
-            FireStationDataLookup = state.GetComponentLookup<FireStationData>(false);
-            CargoTransportStationDataLookup = state.GetComponentLookup<CargoTransportStationData>(false);
-            TransportDepotDataLookup = state.GetComponentLookup<TransportDepotData>(false);
-            GarbageFacilityDataLookup = state.GetComponentLookup<GarbageFacilityData>(false);
-            DeathcareFacilityDataLookup = state.GetComponentLookup<DeathcareFacilityData>(false);
-            PublicTransportStationDataLookup = state.GetComponentLookup<PublicTransportStationData>(false);
-            MaintenanceDepotDataLookup = state.GetComponentLookup<MaintenanceDepotData>(false);
-            PostFacilityDataLookup = state.GetComponentLookup<PostFacilityData>(false);
+
+            BuildingDataLookup = state.GetComponentLookup<BuildingData>();
+            WorkplaceDataLookup = state.GetComponentLookup<WorkplaceData>();
+            PowerPlantDataLookup = state.GetComponentLookup<PowerPlantData>();
+            SchoolDataLookup = state.GetComponentLookup<SchoolData>();
+            HospitalDataLookup = state.GetComponentLookup<HospitalData>();
+            PoliceStationDataLookup = state.GetComponentLookup<PoliceStationData>();
+            PrisonDataLookup = state.GetComponentLookup<PrisonData>();
+            FireStationDataLookup = state.GetComponentLookup<FireStationData>();
+            CargoTransportStationDataLookup = state.GetComponentLookup<CargoTransportStationData>();
+            TransportDepotDataLookup = state.GetComponentLookup<TransportDepotData>();
+            GarbageFacilityDataLookup = state.GetComponentLookup<GarbageFacilityData>();
+            DeathcareFacilityDataLookup = state.GetComponentLookup<DeathcareFacilityData>();
+            PublicTransportStationDataLookup = state.GetComponentLookup<PublicTransportStationData>();
+            MaintenanceDepotDataLookup = state.GetComponentLookup<MaintenanceDepotData>();
+            PostFacilityDataLookup = state.GetComponentLookup<PostFacilityData>();
+            AdminBuildingDataLookup = state.GetComponentLookup<AdminBuildingData>();
+            WelfareOfficeDataLookup = state.GetComponentLookup<WelfareOfficeData>();
+            ResearchFacilityDataLookup = state.GetComponentLookup<ResearchFacilityData>();
+            TelecomFacilityDataLookup = state.GetComponentLookup<TelecomFacilityData>();
+            ParkDataLookup = state.GetComponentLookup<ParkData>();
         }
 
         [ReadOnly]
         public EntityTypeHandle EntityTypeHandle;
 
+        public ComponentLookup<BuildingData> BuildingDataLookup;
         public ComponentLookup<WorkplaceData> WorkplaceDataLookup;
         public ComponentLookup<PowerPlantData> PowerPlantDataLookup;
         public ComponentLookup<SchoolData> SchoolDataLookup;
@@ -93,6 +109,11 @@ namespace RealisticDensity.Jobs
         public ComponentLookup<PublicTransportStationData> PublicTransportStationDataLookup;
         public ComponentLookup<MaintenanceDepotData> MaintenanceDepotDataLookup;
         public ComponentLookup<PostFacilityData> PostFacilityDataLookup;
+        public ComponentLookup<AdminBuildingData> AdminBuildingDataLookup;
+        public ComponentLookup<WelfareOfficeData> WelfareOfficeDataLookup;
+        public ComponentLookup<ResearchFacilityData> ResearchFacilityDataLookup;
+        public ComponentLookup<TelecomFacilityData> TelecomFacilityDataLookup;
+        public ComponentLookup<ParkData> ParkDataLookup;
     }
 
     public struct UpdateCityServicesJob : IJobChunk
@@ -100,6 +121,7 @@ namespace RealisticDensity.Jobs
         public EntityCommandBuffer.ParallelWriter Ecb;
         public EntityTypeHandle EntityTypeHandle;
 
+        public ComponentLookup<BuildingData> BuildingDataLookup;
         public ComponentLookup<WorkplaceData> WorkplaceDataLookup;
         public ComponentLookup<PowerPlantData> PowerPlantDataLookup;
         public ComponentLookup<SchoolData> SchoolDataLookup;
@@ -114,6 +136,11 @@ namespace RealisticDensity.Jobs
         public ComponentLookup<PublicTransportStationData> PublicTransportStationDataLookup;
         public ComponentLookup<MaintenanceDepotData> MaintenanceDepotDataLookup;
         public ComponentLookup<PostFacilityData> PostFacilityDataLookup;
+        public ComponentLookup<AdminBuildingData> AdminBuildingDataLookup;
+        public ComponentLookup<WelfareOfficeData> WelfareOfficeDataLookup;
+        public ComponentLookup<ResearchFacilityData> ResearchFacilityDataLookup;
+        public ComponentLookup<TelecomFacilityData> TelecomFacilityDataLookup;
+        public ComponentLookup<ParkData> ParkDataLookup;
 
         public void Execute(in ArchetypeChunk chunk,
             int unfilteredChunkIndex,
@@ -204,6 +231,35 @@ namespace RealisticDensity.Jobs
             else if (PostFacilityDataLookup.HasComponent(entity))
             {
                 var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.PostFacility.Medium, workplaceData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (AdminBuildingDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.AdminBuilding.Medium, workplaceData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (WelfareOfficeDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.WelfareOffice.Medium, workplaceData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (ResearchFacilityDataLookup.HasComponent(entity))
+            {
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.ResearchFacility.Medium, workplaceData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (TelecomFacilityDataLookup.HasComponent(entity))
+            {
+                BuildingData buildingData = BuildingDataLookup[entity];
+                float lotSizeMultiplier = math.max(1, buildingData.m_LotSize.y * buildingData.m_LotSize.x / 100);
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.TelecomFacility.Medium * lotSizeMultiplier, workplaceData);
+                Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
+            }
+            else if (ParkDataLookup.HasComponent(entity))
+            {
+                BuildingData buildingData = BuildingDataLookup[entity];
+                float lotSizeMultiplier = math.max(1, buildingData.m_LotSize.y * buildingData.m_LotSize.x / 100);
+                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.ParkData.Medium * lotSizeMultiplier, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
 

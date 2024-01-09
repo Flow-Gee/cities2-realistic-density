@@ -6,6 +6,14 @@ Why a power plant only has 10 employees or a high school with 2000 students only
 **Then this mod is just right for you.**
 
 ## Updates
+- **v0.12.0 Added more city buildings, adjusted calculations**
+    - Introduced calculations by lot size
+	- Adjusted calculations for workPerUnit to fix HighRent issue
+	- Added Administration Buildings
+	- Added Welfare Office
+	- Added Research Facilities
+	- Added Telecommunication Facilities
+	- Added Park buildings
 - **v0.11.0 Adjusted calculations for workPerUnit**
 	- Some bug fixing
 	- Split commercial and industrial into it's own jobs

@@ -22,5 +22,10 @@ namespace RealisticDensity.Systems
         public static Factor4 DeathcareFacility = new(1f, 1.5f, 2f, 3f);
         public static Factor4 PublicTransportStation = new(1f, 2f, 3f, 4f);
         public static Factor4 PostFacility = new(1f, 2f, 3f, 4f);
+        public static Factor4 AdminBuilding = new(1f, 2f, 3f, 4f);
+        public static Factor4 WelfareOffice = new(1f, 2f, 3f, 4f);
+        public static Factor4 ResearchFacility = new(1f, 2f, 3f, 4f);
+        public static Factor4 TelecomFacility = new(1f, 1.5f, 2f, 3f);
+        public static Factor4 ParkData = new(1f, 1.5f, 2f, 3f);
     }
 }
