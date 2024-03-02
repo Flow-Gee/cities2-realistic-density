@@ -23,6 +23,7 @@ namespace RealisticDensity.Jobs
                 {
                     All =
                     [
+                        ComponentType.ReadOnly<PrefabData>(),
                         ComponentType.ReadOnly<WorkplaceData>(),
                         ComponentType.ReadOnly<ServiceCompanyData>(),
                         ComponentType.ReadOnly<CommercialCompanyData>(),
@@ -46,6 +47,8 @@ namespace RealisticDensity.Jobs
             EntityTypeHandle = state.GetEntityTypeHandle();
             WorkplaceDataLookup = state.GetComponentLookup<WorkplaceData>();
             ServiceCompanyDataLookup = state.GetComponentLookup<ServiceCompanyData>();
+            IndustrialProcessDataLookup = state.GetComponentLookup<IndustrialProcessData>();
+            ResourceDataLookup = state.GetComponentLookup<ResourceData>();
         }
 
         [ReadOnly]
@@ -53,6 +56,8 @@ namespace RealisticDensity.Jobs
 
         public ComponentLookup<WorkplaceData> WorkplaceDataLookup;
         public ComponentLookup<ServiceCompanyData> ServiceCompanyDataLookup;
+        public ComponentLookup<IndustrialProcessData> IndustrialProcessDataLookup;
+        public ComponentLookup<ResourceData> ResourceDataLookup;
     }
 
     public struct UpdateCommercialBuildingsJob : IJobChunk
@@ -62,6 +67,13 @@ namespace RealisticDensity.Jobs
 
         public ComponentLookup<WorkplaceData> WorkplaceDataLookup;
         public ComponentLookup<ServiceCompanyData> ServiceCompanyDataLookup;
+        public ComponentLookup<IndustrialProcessData> IndustrialProcessDataLookup;
+        public ComponentLookup<ResourceData> ResourceDataLookup;
+
+        public EconomyParameterData EconomyParameterData;
+        public ResourcePrefabs ResourcePrefabs;
+        public BuildingData BuildingData;
+        public SpawnableBuildingData SpawnableBuildingData;
 
         public void Execute(in ArchetypeChunk chunk,
             int unfilteredChunkIndex,
@@ -70,25 +82,37 @@ namespace RealisticDensity.Jobs
         {
             NativeArray<Entity> entities = chunk.GetNativeArray(EntityHandle);
             ChunkEntityEnumerator enumerator = new(useEnabledMask, chunkEnabledMask, chunk.Count);
+            PrefabSystem prefabSystem = World.DefaultGameObjectInjectionWorld?.GetOrCreateSystemManaged<PrefabSystem>();
             while (enumerator.NextEntityIndex(out int i))
             {
                 Entity entity = entities[i];
                 DefaultData realisticDensityData = new();
+                CompanyPrefab prefab = prefabSystem.GetPrefab<CompanyPrefab>(entity);
 
                 WorkplaceData workplaceData = WorkplaceDataLookup[entity];
                 ServiceCompanyData serviceCompanyData = ServiceCompanyDataLookup[entity];
 
                 float workforceFactor = WorkforceFactors.Commercial.Medium;
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(workforceFactor, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(workforceFactor, workplaceData);
                 Ecb.SetComponent(i, entity, updatedWorkplaceData);
 
                 ServiceCompanyData updatedServiceCompanyData = serviceCompanyData;
 
                 realisticDensityData.serviceCompanyData_MaxWorkersPerCell = serviceCompanyData.m_MaxWorkersPerCell;
-                updatedServiceCompanyData.m_MaxWorkersPerCell += CommonHelper.MaxWorkersPerCellIncrease(workforceFactor, serviceCompanyData.m_MaxWorkersPerCell);
+                updatedServiceCompanyData.m_MaxWorkersPerCell += DensityHelper.MaxWorkersPerCellIncrease(workforceFactor, serviceCompanyData.m_MaxWorkersPerCell);
 
                 realisticDensityData.serviceCompanyData_WorkPerUnit = serviceCompanyData.m_WorkPerUnit;
-                updatedServiceCompanyData.m_WorkPerUnit += CommonHelper.WorkPerUnitIncrease(workforceFactor, serviceCompanyData.m_WorkPerUnit);
+                updatedServiceCompanyData.m_WorkPerUnit = DensityHelper.WorkPerUnitForCommercial(
+                    prefab,
+                    IndustrialProcessDataLookup[entity],
+                    updatedServiceCompanyData,
+                    updatedWorkplaceData,
+                    ResourcePrefabs,
+                    ResourceDataLookup,
+                    EconomyParameterData,
+                    BuildingData,
+                    SpawnableBuildingData
+                );
 
                 Ecb.SetComponent(i, entity, updatedServiceCompanyData);
 

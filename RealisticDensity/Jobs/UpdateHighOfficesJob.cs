@@ -24,6 +24,7 @@ namespace RealisticDensity.Jobs
                     [
                         ComponentType.ReadOnly<SpawnableBuildingData>(),
                         ComponentType.ReadOnly<BuildingData>(),
+                        ComponentType.ReadOnly<PrefabData>(),
                         ComponentType.ReadOnly<BuildingPropertyData>(),
                         ComponentType.ReadOnly<OfficeBuilding>(),
                     ],

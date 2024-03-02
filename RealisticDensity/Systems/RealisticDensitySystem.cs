@@ -7,6 +7,8 @@ using RealisticDensity.Jobs;
 using Unity.Jobs;
 using Game.Common;
 using Colossal.Serialization.Entities;
+using Game.Prefabs;
+using Unity.Mathematics;
 
 namespace RealisticDensity.Systems
 {
@@ -18,6 +20,7 @@ namespace RealisticDensity.Systems
         readonly public static int kProductionFactor = 3;
 
         private ModificationEndBarrier Barrier;
+        private PrefabSystem m_PrefabSystem;
 
         public LocalSettings m_LocalSettings;
         public static RealisticDensitySettings Settings;
@@ -32,6 +35,9 @@ namespace RealisticDensity.Systems
         private UpdateHighOfficesTypeHandle m_UpdateHighOfficesJobTypeHandle;
         private EntityQuery m_UpdateHighOfficesJobQuery;
 
+        private EntityQuery m_EconomyParameterQuery;
+        private ResourcePrefabs m_ResourcePrefabs;
+
         [Preserve]
         protected override void OnCreate()
         {
@@ -44,6 +50,9 @@ namespace RealisticDensity.Systems
             // Create a barrier system using the default world
             Barrier = World.GetOrCreateSystemManaged<ModificationEndBarrier>();
 
+            m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
+            m_ResourcePrefabs = World.GetOrCreateSystemManaged<ResourceSystem>().GetPrefabs();
+
             // Job Queries
             UpdateCityServicesQuery updateCityServicesQuery = new();
             m_UpdateCityServicesJobQuery = GetEntityQuery(updateCityServicesQuery.Query);
@@ -54,11 +63,14 @@ namespace RealisticDensity.Systems
             UpdateHighOfficesQuery updateHighOfficesQuery = new();
             m_UpdateHighOfficesJobQuery = GetEntityQuery(updateHighOfficesQuery.Query);
 
+            m_EconomyParameterQuery = GetEntityQuery(new ComponentType[] { ComponentType.ReadOnly<EconomyParameterData>() });
+
             RequireAnyForUpdate(
                 m_UpdateCommercialBuildingsQuery,
                 m_UpdateIndustryBuildingsQuery,
                 m_UpdateCityServicesJobQuery,
-                m_UpdateHighOfficesJobQuery
+                m_UpdateHighOfficesJobQuery,
+                m_EconomyParameterQuery
             );
 
             Mod.DebugLog("System created.");
@@ -145,6 +157,16 @@ namespace RealisticDensity.Systems
         private void UpdateCommercialBuildings()
         {
             Mod.DebugLog("Run UpdateCommercialBuildingsJob");
+            
+            BuildingData buildingData = new()
+            {
+                m_LotSize = new int2(100, 10)
+            };
+            SpawnableBuildingData spawnableBuildingData = new()
+            {
+                m_Level = 1
+            };
+
             m_UpdateCommercialBuildingsTypeHandle.AssignHandles(ref CheckedStateRef);
             UpdateCommercialBuildingsJob updateCommercialBuildingsJob = new()
             {
@@ -152,6 +174,12 @@ namespace RealisticDensity.Systems
                 EntityHandle = m_UpdateCommercialBuildingsTypeHandle.EntityTypeHandle,
                 WorkplaceDataLookup = m_UpdateCommercialBuildingsTypeHandle.WorkplaceDataLookup,
                 ServiceCompanyDataLookup = m_UpdateCommercialBuildingsTypeHandle.ServiceCompanyDataLookup,
+                IndustrialProcessDataLookup = m_UpdateCommercialBuildingsTypeHandle.IndustrialProcessDataLookup,
+                ResourceDataLookup = m_UpdateCommercialBuildingsTypeHandle.ResourceDataLookup,
+                EconomyParameterData = m_EconomyParameterQuery.GetSingleton<EconomyParameterData>(),
+                ResourcePrefabs = m_ResourcePrefabs,
+                BuildingData = buildingData,
+                SpawnableBuildingData = spawnableBuildingData,
             };
             Dependency = updateCommercialBuildingsJob.Schedule(m_UpdateCommercialBuildingsQuery, Dependency);
             Barrier.AddJobHandleForProducer(Dependency);
@@ -160,6 +188,16 @@ namespace RealisticDensity.Systems
         private void UpdateIndustryBuildings()
         {
             Mod.DebugLog("Run UpdateIndustryBuildingsJob");
+
+            BuildingData buildingData = new()
+            {
+                m_LotSize = new int2(100, 10)
+            };
+            SpawnableBuildingData spawnableBuildingData = new()
+            {
+                m_Level = 1
+            };
+
             m_UpdateIndustryBuildingsTypeHandle.AssignHandles(ref CheckedStateRef);
             UpdateIndustryBuildingsJob updateIndustryBuildingsJob = new()
             {
@@ -170,6 +208,11 @@ namespace RealisticDensity.Systems
                 ExtractorCompanyDataLookup = m_UpdateIndustryBuildingsTypeHandle.ExtractorCompanyDataLookup,
                 StorageLimitDataLookup = m_UpdateIndustryBuildingsTypeHandle.StorageLimitDataLookup,
                 TransportCompanyDataLookup = m_UpdateIndustryBuildingsTypeHandle.TransportCompanyDataLookup,
+                ResourceDataLookup = m_UpdateIndustryBuildingsTypeHandle.ResourceDataLookup,
+                EconomyParameterData = m_EconomyParameterQuery.GetSingleton<EconomyParameterData>(),
+                ResourcePrefabs = m_ResourcePrefabs,
+                BuildingData = buildingData,
+                SpawnableBuildingData = spawnableBuildingData,
             };
             Dependency = updateIndustryBuildingsJob.Schedule(m_UpdateIndustryBuildingsQuery, Dependency);
             Barrier.AddJobHandleForProducer(Dependency);

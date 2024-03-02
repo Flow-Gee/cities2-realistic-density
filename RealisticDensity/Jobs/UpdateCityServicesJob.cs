@@ -165,7 +165,7 @@ namespace RealisticDensity.Jobs
             // Power plants need a lot more workers for more realism
             if (PowerPlantDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.PowerPlant.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.PowerPlant.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (SchoolDataLookup.HasComponent(entity))
@@ -174,91 +174,91 @@ namespace RealisticDensity.Jobs
                 // Schools can also be tweaked. A teacher ratio of 1:12 is the average in Germany 2017
                 // Based on research from https://www.theglobaleconomy.com/Germany/Student_teacher_ratio_primary_school/#:~:text=For%20that%20indicator%2C%20we%20provide,is%2012.3%20students%20per%20teacher.
                 // int teacherAmount = (int)math.round(SchoolDataLookup[entity].m_StudentCapacity / 12.3f);
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.School.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.School.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (HospitalDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.Hospital.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.Hospital.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (PoliceStationDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.PoliceStation.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.PoliceStation.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (PrisonDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.Prison.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.Prison.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (FireStationDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.FireStation.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.FireStation.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (CargoTransportStationDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.CargoTransportStation.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.CargoTransportStation.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (TransportDepotDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.TransportDepot.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.TransportDepot.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (GarbageFacilityDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.GarbageFacility.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.GarbageFacility.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (DeathcareFacilityDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.DeathcareFacility.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.DeathcareFacility.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (PublicTransportStationDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.PublicTransportStation.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.PublicTransportStation.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (MaintenanceDepotDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.MaintenanceDepot.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.MaintenanceDepot.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (PostFacilityDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.PostFacility.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.PostFacility.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (AdminBuildingDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.AdminBuilding.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.AdminBuilding.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (WelfareOfficeDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.WelfareOffice.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.WelfareOffice.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (ResearchFacilityDataLookup.HasComponent(entity))
             {
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.ResearchFacility.Medium, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.ResearchFacility.Medium, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (TelecomFacilityDataLookup.HasComponent(entity))
             {
                 BuildingData buildingData = BuildingDataLookup[entity];
                 float lotSizeMultiplier = math.max(1, buildingData.m_LotSize.y * buildingData.m_LotSize.x / 100);
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.TelecomFacility.Medium * lotSizeMultiplier, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.TelecomFacility.Medium * lotSizeMultiplier, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
             else if (ParkDataLookup.HasComponent(entity))
             {
                 BuildingData buildingData = BuildingDataLookup[entity];
                 float lotSizeMultiplier = math.max(1, buildingData.m_LotSize.y * buildingData.m_LotSize.x / 100);
-                var updatedWorkplaceData = CommonHelper.UpdateWorkplaceData(WorkforceFactors.ParkData.Medium * lotSizeMultiplier, workplaceData);
+                var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(WorkforceFactors.ParkData.Medium * lotSizeMultiplier, workplaceData);
                 Ecb.SetComponent(entityIndex, entity, updatedWorkplaceData);
             }
 

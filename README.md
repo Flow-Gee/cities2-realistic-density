@@ -50,7 +50,6 @@ Join our discord community: [https://discord.gg/M9rgRtGcRa](https://discord.gg/M
 
 ## Credits
 - Thanks **optimus-code** for his C# knowledge and help
-- Thanks to **captain_on_coit** for HookUI and help with JSX and React
 
 ## Special thanks to:
 - **Susanne**, **Bruceyboy24804**, **Woovie**, **Rebecca** and **mad** for their testing and feedback
