@@ -1,6 +1,4 @@
-﻿using RealisticDensity.Helper;
-using System;
-using Unity.Mathematics;
+﻿using System;
 
 namespace RealisticDensity.Common
 {

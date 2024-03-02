@@ -6,7 +6,7 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<Nullable>disable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
 		<LangVersion>latest</LangVersion>
 		<AssemblyVersion>$(PluginVersion)</AssemblyVersion>
 		<FileVersion>$(PluginVersion)</FileVersion>
@@ -19,13 +19,6 @@
 			https://nuget.samboy.dev/v3/index.json
 		</RestoreAdditionalProjectSources>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Remove="Resources\**" />
-	</ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Include="Resources\**" />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<Reference Include="Colossal.AssetPipeline">
@@ -408,15 +401,11 @@
 			<HintPath>$(Cities2_Assembly_Location)\UnityEngine.XRModule.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
-		<Reference Include="HookUILib">
-			<HintPath>$(Cities2_Game_Location)\BepInEx\plugins\HookUI\HookUILib.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-		<PackageReference Include="HarmonyX" Version="2.*" />
+		<PackageReference Include="HarmonyX" Version="2.10.2" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(BepInExVersion)' == '6'">
@@ -440,6 +429,5 @@
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="if not exist &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)&quot; mkdir &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)\$(ProjectName).dll&quot;;&#xD;&#xA;copy /Y &quot;$(TargetDir)DefaultSettings.json&quot; &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)\&quot;&#xD;&#xA;powershell -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)build.ps1&quot; &quot;$(ProjectName)&quot; &quot;$(PluginVersion)&quot; &quot;$(ProjectDir)\&quot; &quot;$(Cities2_Game_Location)\BepInEx\plugins\$(ProjectName)\\&quot; $(BepInExVersion)" />
 	</Target>
-	
-	<ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
 </Project>

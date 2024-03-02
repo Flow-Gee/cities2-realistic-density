@@ -1,6 +1,7 @@
 ﻿using Game;
 using Game.Common;
 using HarmonyLib;
+using RealisticDensity.Systems;
 
 namespace RealisticDensity.Patches
 {
@@ -11,7 +12,7 @@ namespace RealisticDensity.Patches
         [HarmonyPatch(typeof(SystemOrder), nameof(SystemOrder.Initialize))]
         public static void GetSystemOrder(UpdateSystem updateSystem)
         {
-            Mod.Instance.OnCreateWorld(updateSystem);
+            updateSystem?.UpdateAt<RealisticDensitySystem>(SystemUpdatePhase.ModificationEnd);
         }
     }
 }

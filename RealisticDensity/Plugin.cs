@@ -31,16 +31,4 @@ namespace RealisticDensity
             }
         }
     }
-
-    /*public class RealisticDensityUI : UIExtension
-    {
-        public new readonly ExtensionType extensionType = ExtensionType.Panel;
-        public new readonly string extensionID = "89pleasure.realisticdensity";
-        public new readonly string extensionContent;
-
-        public RealisticDensityUI()
-        {
-            extensionContent = LoadEmbeddedResource("RealisticDensity.Resources.ui.js");
-        }
-    }*/
 }

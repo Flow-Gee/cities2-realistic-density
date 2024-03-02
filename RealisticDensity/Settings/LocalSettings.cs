@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using RealisticDensity.Settings;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtendedTooltip.Settings
+namespace RealisticDensity.Settings
 {
     public class LocalSettings
     {

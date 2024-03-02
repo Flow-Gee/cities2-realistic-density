@@ -1,11 +1,10 @@
 ﻿using Colossal.Logging;
 using Game;
 using Game.Modding;
-using RealisticDensity.Systems;
 
 namespace RealisticDensity
 {
-    public sealed class Mod : IMod
+    public class Mod : IMod
     {
         public const string Name = MyPluginInfo.PLUGIN_NAME;
         public const string Version = MyPluginInfo.PLUGIN_VERSION;
@@ -24,13 +23,6 @@ namespace RealisticDensity
             Log.Info("Loading.");
         }
 
-        public void OnCreateWorld(UpdateSystem updateSystem)
-        {
-            Log.Info("Add system to world.");
-            UnityEngine.Debug.Log("Add system to world.");
-            updateSystem.UpdateAt<RealisticDensitySystem>(SystemUpdatePhase.GameSimulation);
-        }
-
         public void OnDispose()
         {
             Log.Info("Mod disposed.");
@@ -39,7 +31,12 @@ namespace RealisticDensity
 
         public static void DebugLog(string message)
         {
-            UnityEngine.Debug.Log($"[{Mod.Name} | v{Mod.Version}] {message}");
+            UnityEngine.Debug.Log($"[{Name} | v{Version}] {message}");
+        }
+
+        public void OnCreateWorld(UpdateSystem updateSystem)
+        {
+            // Do nothing
         }
     }
 }
