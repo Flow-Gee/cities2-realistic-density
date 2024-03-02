@@ -1,4 +1,8 @@
 ## Changelog
+- **v1.0.0 Introducing UI**
+	- Introduce UI to manually adjust values
+	- Improved work per unity calculation for better balancing
+	- Cleanup
 - **v0.13.0 Improved job performance**
 	- Improve job performance by reducing the number of queries
 	- Fixed intererence with FindStuff mod causing infinite loop and heavy lag
