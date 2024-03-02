@@ -1,0 +1,32 @@
+## Changelog
+- **v0.13.0 Improved job performance**
+	- Improve job performance by reducing the number of queries
+	- Fixed intererence with FindStuff mod causing infinite loop and heavy lag
+	- Removed unneded UI implementation for now
+	- Cleanup the project code
+- **v0.12.0 Added more city buildings, adjusted calculations**
+    - Introduced calculations by lot size
+	- Adjusted calculations for workPerUnit to fix HighRent issue
+	- Added Administration Buildings
+	- Added Welfare Office
+	- Added Research Facilities
+	- Added Telecommunication Facilities
+	- Added Park buildings
+- **v0.11.0 Adjusted calculations for workPerUnit**
+	- Some bug fixing
+	- Split commercial and industrial into it's own jobs
+	- Updated queries to be more accurate
+- **v0.10.0 Added support for more city buildings**
+	- Public Transportation
+	- Maintenance Depots
+	- Transport Depots
+	- Prisons
+	- Deathcare Facilities
+	- Garbage Facilities
+	- Post Facilities
+- **v0.9.1 Fix spawnables job infinite loop log spam**
+- **v0.9.0 Fix save game serialization**
+- **v0.8.0 Failed attempt to fix serialization (sorry)**
+- **v0.7.0 High density office fix**
+	- Fixes support for high density office buildings
+	- Adjusted the employee numbers for high density office buildings
