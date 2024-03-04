@@ -20,6 +20,14 @@
 		</RestoreAdditionalProjectSources>
 		<NoWarn>MSB3277</NoWarn>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Resources\ui.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\ui.js" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<Reference Include="Colossal.AssetPipeline">

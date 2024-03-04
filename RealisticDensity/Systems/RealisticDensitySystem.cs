@@ -20,7 +20,6 @@ namespace RealisticDensity.Systems
         readonly public static int kProductionFactor = 3;
 
         private ModificationEndBarrier Barrier;
-        private PrefabSystem m_PrefabSystem;
 
         public LocalSettings m_LocalSettings;
         public static RealisticDensitySettings Settings;
@@ -50,7 +49,6 @@ namespace RealisticDensity.Systems
             // Create a barrier system using the default world
             Barrier = World.GetOrCreateSystemManaged<ModificationEndBarrier>();
 
-            m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
             m_ResourcePrefabs = World.GetOrCreateSystemManaged<ResourceSystem>().GetPrefabs();
 
             // Job Queries

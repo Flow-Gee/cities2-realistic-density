@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealisticDensity", "RealisticDensity\RealisticDensity.csproj", "{50427B93-914D-4FB9-9F61-93BC0AA0434B}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "RealisticDensity.Frontend", "RealisticDensity.Frontend\RealisticDensity.Frontend.njsproj", "{62DF0DBA-C975-4485-8CA9-9AF3DDB304B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{50427B93-914D-4FB9-9F61-93BC0AA0434B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50427B93-914D-4FB9-9F61-93BC0AA0434B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50427B93-914D-4FB9-9F61-93BC0AA0434B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62DF0DBA-C975-4485-8CA9-9AF3DDB304B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62DF0DBA-C975-4485-8CA9-9AF3DDB304B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62DF0DBA-C975-4485-8CA9-9AF3DDB304B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62DF0DBA-C975-4485-8CA9-9AF3DDB304B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
