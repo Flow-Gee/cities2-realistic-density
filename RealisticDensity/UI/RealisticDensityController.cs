@@ -15,7 +15,8 @@ namespace RealisticDensity.UI
         {
             return new RealisticDensityViewModel
             {
-                IsVisible = false
+                IsVisible = false,
+                IsEnabled = false,
             };
         }
 
@@ -30,6 +31,7 @@ namespace RealisticDensity.UI
         }
 
         [OnTrigger]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Called by gooee.")]
         private void OnToggleVisible()
         {
             Model.IsVisible = !Model.IsVisible;
@@ -42,6 +44,7 @@ namespace RealisticDensity.UI
         /// <param name="url"></param>
         /// Copyright by optimus-code
         [OnTrigger]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Called by gooee.")]
         private void OpenURL(string url)
         {
             if (string.IsNullOrEmpty(url))

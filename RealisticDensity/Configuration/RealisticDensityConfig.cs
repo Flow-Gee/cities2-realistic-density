@@ -1,5 +1,4 @@
 ﻿using RealisticDensity.Configuration;
-using System.Collections.Generic;
 
 namespace FindStuff.Configuration
 {
@@ -7,28 +6,10 @@ namespace FindStuff.Configuration
     {
         protected override string ConfigFileName => "config.json";
 
-        public bool OrderByAscending
-        {
-            get;
-            set;
-        } = true;
-
-        public bool EnableShortcut
+        public bool IsEnabled
         {
             get;
             set;
         } = false;
-
-        public bool ExpertMode
-        {
-            get;
-            set;
-        } = false;
-
-        public Dictionary<string, ushort> RecentSearches
-        {
-            get;
-            set;
-        } = [];
     }
 }

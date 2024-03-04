@@ -1,9 +1,10 @@
 {
   "name": "RealisticDensity",
-  "version_number": "1.0.0",
+  "version_number": "0.14.0",
   "website_url": "https://github.com/89pleasure/cities2-realistic-density",
   "description": "Brings more density to town.",
   "dependencies": [
-    "BepInEx-BepInExPack-5.4.2100"
+    "BepInEx-BepInExPack-5.4.2100",
+    "Cities2Modding-Gooee-0.0.7"
   ]
 }

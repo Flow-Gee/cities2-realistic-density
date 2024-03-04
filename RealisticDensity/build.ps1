@@ -12,22 +12,6 @@ Copy-Item -Path $projectPath\..\icon.png -Destination $pluginPath -Recurse -Forc
 Copy-Item -Path $projectPath\..\README.md -Destination $pluginPath -Recurse -Force
 Copy-Item -Path $projectPath\..\CHANGELOG.md -Destination $pluginPath -Recurse -Force
 
-# Compress the contents of the folder
-try {
-	$languages = Get-ChildItem -Path "$projectPath\languages"
-    Compress-Archive -Path $languages.FullName -DestinationPath "$pluginPath\language_pack" -Force
-    Write-Host "Language pack successfully created at $pluginPath"
-} catch {
-    Write-Host "Error: $_"
-    exit 1
-}
-
-# Create language pack file
-if (Test-Path "$pluginPath\language_pack.data" -PathType Leaf) {
-	Remove-Item -Path "$pluginPath\language_pack.data" -Force
-}
-Rename-Item -Path "$pluginPath\language_pack.zip" -NewName "$pluginPath\language_pack.data"
-
 try {
 	$files = Get-ChildItem -Path $pluginPath
 	Compress-Archive -Path $files.FullName -DestinationPath "$pluginPath\..\$pluginName-BepInEx$bepInExVersion-v$pluginVersion.zip" -Force

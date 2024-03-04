@@ -13,7 +13,8 @@ namespace RealisticDensity
     public class Plugin : BaseUnityPlugin
     {
         private Mod Mod;
-        
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Called by BepInEx.")]
         private void Awake()
         {
             Mod = new Mod();

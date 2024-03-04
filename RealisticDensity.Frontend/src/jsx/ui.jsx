@@ -30,7 +30,7 @@ const RealisticDensityButton = ({ react, setupController }) => {
     const description = `Open the Realistic Density v${model.Version} mod panel.`;
     const realisticDensityBtnRef = react.useRef(null);
 
-    return <>
+    return model.IsEnabled ? <>
         <div className="spacer_oEi"></div>
         <button onMouseEnter={onMouseEnter} onClick={onClick} class="button_s2g button_ECf item_It6 item-mouse-states_Fmi item-selected_tAM item-focused_FuT button_s2g button_ECf item_It6 item-mouse-states_Fmi item-selected_tAM item-focused_FuT toggle-states_X82 toggle-states_DTm">
             <div className="fa fa-solid-magnifying-glass icon-md"></div>
@@ -38,7 +38,7 @@ const RealisticDensityButton = ({ react, setupController }) => {
                 <ToolTipContent title="Realistic Density" description={description} />
             </AutoToolTip>
         </button>
-    </>;
+    </> : null;
 };
 window.$_gooee.register("realisticdensity", "ExtendedTooltipIconButton", RealisticDensityButton, "bottom-right-toolbar", "realisticdensity");
 

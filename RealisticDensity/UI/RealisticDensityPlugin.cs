@@ -1,5 +1,4 @@
-﻿using Gooee;
-using Gooee.Plugins;
+﻿using Gooee.Plugins;
 using Gooee.Plugins.Attributes;
 using RealisticDensity;
 using RealisticDensity.UI;

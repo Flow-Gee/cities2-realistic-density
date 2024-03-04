@@ -15,7 +15,7 @@ namespace RealisticDensity.UI
         {
             get;
             set;
-        } = true;
+        } = false;
 
         public float CommercialFactor
         {
