@@ -38,5 +38,10 @@ namespace RealisticDensity
         {
             // Do nothing
         }
+
+        public void OnLoad(UpdateSystem updateSystem)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

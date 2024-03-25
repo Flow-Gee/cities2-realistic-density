@@ -1,4 +1,5 @@
 ## Changelog
+- **v0.14.1 Adds patch v1.1.0f1 support**
 - **v0.14.0 Improved profitability/production balancing**
 	- Improved work per unit calculation for better balancing of profitability
 - **v0.13.0 Improved job performance**
