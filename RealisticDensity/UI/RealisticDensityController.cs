@@ -7,7 +7,7 @@ using System;
 
 namespace RealisticDensity.UI
 {
-    public class RealisticDensityController : Controller<RealisticDensityViewModel>
+    public partial class RealisticDensityController : Controller<RealisticDensityViewModel>
     {
         public readonly static RealisticDensityConfig _config = ConfigBase.Load<RealisticDensityConfig>();
 

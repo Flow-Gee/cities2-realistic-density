@@ -2026,7 +2026,7 @@
     const realisticDensityBtnRef = react.useRef(null);
     return model.IsEnabled ? /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("div", { className: "spacer_oEi" }), /* @__PURE__ */ import_react7.default.createElement("button", { onMouseEnter, onClick, class: "button_s2g button_ECf item_It6 item-mouse-states_Fmi item-selected_tAM item-focused_FuT button_s2g button_ECf item_It6 item-mouse-states_Fmi item-selected_tAM item-focused_FuT toggle-states_X82 toggle-states_DTm" }, /* @__PURE__ */ import_react7.default.createElement("div", { className: "fa fa-solid-magnifying-glass icon-md" }), /* @__PURE__ */ import_react7.default.createElement(AutoToolTip, { targetRef: realisticDensityBtnRef, float: "up", align: "right" }, /* @__PURE__ */ import_react7.default.createElement(ToolTipContent, { title: "Realistic Density", description })))) : null;
   };
-  window.$_gooee.register("realisticdensity", "ExtendedTooltipIconButton", RealisticDensityButton, "bottom-right-toolbar", "realisticdensity");
+  window.$_gooee.register("realisticdensity", "RealisticDensityIconButton", RealisticDensityButton, "bottom-right-toolbar", "realisticdensity");
   var RealisticDensityContainer = ({ react, setupController }) => {
     const { TabModal } = window.$_gooee.framework;
     const { model, update, trigger, _L } = setupController();

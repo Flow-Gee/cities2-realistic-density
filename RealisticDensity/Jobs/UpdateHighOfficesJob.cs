@@ -3,8 +3,8 @@ using Game.Prefabs;
 using Game.Tools;
 using RealisticDensity.Prefabs;
 using RealisticDensity.Settings;
-using RealisticDensity.Systems;
 using System.Runtime.CompilerServices;
+using Unity.Burst;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
@@ -53,19 +53,19 @@ namespace RealisticDensity.Jobs
         public ComponentLookup<BuildingPropertyData> BuildingPropertyDataLookup;
     }
 
+    [BurstCompile]
     public struct UpdateHighOfficesJob : IJobChunk
     {
         public EntityCommandBuffer.ParallelWriter Ecb;
         public EntityTypeHandle EntityHandle;
-
         public ComponentLookup<BuildingPropertyData> BuildingPropertyDataLookup;
+        public float OfficesFactor;
 
         public void Execute(in ArchetypeChunk chunk,
             int unfilteredChunkIndex,
             bool useEnabledMask,
             in v128 chunkEnabledMask)
         {
-            RealisticDensitySettings settings = RealisticDensitySystem.Settings;
             NativeArray<Entity> entities = chunk.GetNativeArray(EntityHandle);
             ChunkEntityEnumerator enumerator = new(useEnabledMask, chunkEnabledMask, chunk.Count);
             while (enumerator.NextEntityIndex(out int i))
@@ -74,11 +74,9 @@ namespace RealisticDensity.Jobs
                 DefaultData realisticDensityData = new();
                 BuildingPropertyData buildingPropertyData = BuildingPropertyDataLookup[entity];
 
-                float workforceFactor = settings.OfficesFactor;
-
                 BuildingPropertyData updatedBuildingPropertyData = buildingPropertyData;
                 realisticDensityData.buildingPropertyData_SpaceMultiplier = buildingPropertyData.m_SpaceMultiplier;
-                updatedBuildingPropertyData.m_SpaceMultiplier *= workforceFactor;
+                updatedBuildingPropertyData.m_SpaceMultiplier *= OfficesFactor;
 
                 Ecb.SetComponent(i, entity, updatedBuildingPropertyData);
                 Ecb.AddComponent(i, entity, realisticDensityData);

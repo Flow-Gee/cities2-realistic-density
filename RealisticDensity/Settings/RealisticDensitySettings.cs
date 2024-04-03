@@ -4,7 +4,7 @@ namespace RealisticDensity.Settings
 {
     public class RealisticDensitySettings
     {
-        public string Version { get; } = MyPluginInfo.PLUGIN_VERSION;
+        public string Version { get; } = Mod.Version;
 
         public bool DisableMod { get; set; } = false;
         public bool SpawnablesEnabled { get; set; } = true;

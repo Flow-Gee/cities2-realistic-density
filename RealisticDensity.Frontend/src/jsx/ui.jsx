@@ -40,7 +40,7 @@ const RealisticDensityButton = ({ react, setupController }) => {
         </button>
     </> : null;
 };
-window.$_gooee.register("realisticdensity", "ExtendedTooltipIconButton", RealisticDensityButton, "bottom-right-toolbar", "realisticdensity");
+window.$_gooee.register("realisticdensity", "RealisticDensityIconButton", RealisticDensityButton, "bottom-right-toolbar", "realisticdensity");
 
 const RealisticDensityContainer = ({ react, setupController }) => {
     const { TabModal } = window.$_gooee.framework;

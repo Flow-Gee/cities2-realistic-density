@@ -7,6 +7,7 @@ using RealisticDensity.Prefabs;
 using RealisticDensity.Settings;
 using RealisticDensity.Systems;
 using System.Runtime.CompilerServices;
+using Unity.Burst;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
@@ -84,13 +85,18 @@ namespace RealisticDensity.Jobs
         public ResourcePrefabs ResourcePrefabs;
         public BuildingData BuildingData;
         public SpawnableBuildingData SpawnableBuildingData;
+        public bool OfficesEnabled;
+        public float OfficesFactor;
+        public float IndustryExtractorFactor;
+        public float IndustryProcessingFactor;
+        public bool IndustryIncreaseStorageCapacity;
+        public bool IndustryIncreaseMaxTransports;
 
         public void Execute(in ArchetypeChunk chunk,
             int unfilteredChunkIndex,
             bool useEnabledMask,
             in v128 chunkEnabledMask)
         {
-            RealisticDensitySettings settings = RealisticDensitySystem.Settings;
             NativeArray<Entity> entities = chunk.GetNativeArray(EntityHandle);
             ChunkEntityEnumerator enumerator = new(useEnabledMask, chunkEnabledMask, chunk.Count);
             PrefabSystem prefabSystem = World.DefaultGameObjectInjectionWorld?.GetOrCreateSystemManaged<PrefabSystem>();
@@ -104,12 +110,12 @@ namespace RealisticDensity.Jobs
                 IndustrialProcessData industrialProcessData = IndustrialProcessDataLookup[entity];
                 bool isOffice = IsOffice(industrialProcessData);
                 bool isExtractor = ExtractorCompanyDataLookup.HasComponent(entity);
-                if (isOffice && !settings.OfficesEnabled)
+                if (isOffice && !OfficesEnabled)
                 {
                     continue;
                 }
 
-                float workforceFactor = isOffice ? settings.OfficesFactor : isExtractor ? settings.IndustryExtractorFactor : settings.IndustryProcessingFactor;
+                float workforceFactor = isOffice ? OfficesFactor : isExtractor ? IndustryExtractorFactor : IndustryProcessingFactor;
 
                 var updatedWorkplaceData = DensityHelper.UpdateWorkplaceData(workforceFactor, workplaceData);
                 Ecb.SetComponent(i, entity, updatedWorkplaceData);
@@ -147,7 +153,7 @@ namespace RealisticDensity.Jobs
 
                 Ecb.SetComponent(i, entity, updatedIndustrialProcessData);
 
-                if (settings.IndustryIncreaseStorageCapacity && StorageLimitDataLookup.TryGetComponent(entity, out StorageLimitData storageLimitData))
+                if (IndustryIncreaseStorageCapacity && StorageLimitDataLookup.TryGetComponent(entity, out StorageLimitData storageLimitData))
                 {
                     StorageLimitData updatedStorageLimitData = storageLimitData;
 
@@ -158,7 +164,7 @@ namespace RealisticDensity.Jobs
                     Ecb.SetComponent(i, entity, updatedStorageLimitData);
                 }
 
-                if (settings.IndustryIncreaseMaxTransports && TransportCompanyDataLookup.TryGetComponent(entity, out TransportCompanyData transportCompanyData))
+                if (IndustryIncreaseMaxTransports && TransportCompanyDataLookup.TryGetComponent(entity, out TransportCompanyData transportCompanyData))
                 {
                     TransportCompanyData updatedTransportCompanyData = transportCompanyData;
 

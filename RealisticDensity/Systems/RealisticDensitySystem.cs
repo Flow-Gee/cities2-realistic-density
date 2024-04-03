@@ -9,9 +9,11 @@ using Game.Common;
 using Colossal.Serialization.Entities;
 using Game.Prefabs;
 using Unity.Mathematics;
+using Unity.Burst;
 
 namespace RealisticDensity.Systems
 {
+    [BurstCompile]
     public partial class RealisticDensitySystem : GameSystemBase
     {
         readonly public static int kComponentVersion = 1;
@@ -20,10 +22,7 @@ namespace RealisticDensity.Systems
         readonly public static int kProductionFactor = 3;
 
         private ModificationEndBarrier Barrier;
-
-        public LocalSettings m_LocalSettings;
         public static RealisticDensitySettings Settings;
-        public bool m_LocalSettingsLoaded = false;
 
         private UpdateCommercialBuildingsTypeHandle m_UpdateCommercialBuildingsTypeHandle;
         private EntityQuery m_UpdateCommercialBuildingsQuery;
@@ -43,8 +42,7 @@ namespace RealisticDensity.Systems
             base.OnCreate();
 
             // Load settings
-            LoadSettings();
-            Settings = m_LocalSettings.Settings;
+            Settings = new RealisticDensitySettings();
 
             // Create a barrier system using the default world
             Barrier = World.GetOrCreateSystemManaged<ModificationEndBarrier>();
@@ -91,22 +89,22 @@ namespace RealisticDensity.Systems
                 return;
             }
 
-            if (m_LocalSettings.Settings.CityServicesEnabled && !m_UpdateCityServicesJobQuery.IsEmptyIgnoreFilter)
+            if (Settings.CityServicesEnabled && !m_UpdateCityServicesJobQuery.IsEmptyIgnoreFilter)
             {
                 UpdateCityBuildings();
             }
 
-            if (m_LocalSettings.Settings.SpawnablesEnabled && m_LocalSettings.Settings.CommercialsEnabled && !m_UpdateCommercialBuildingsQuery.IsEmptyIgnoreFilter)
+            if (Settings.SpawnablesEnabled && Settings.CommercialsEnabled && !m_UpdateCommercialBuildingsQuery.IsEmptyIgnoreFilter)
             {
                 UpdateCommercialBuildings();
             }
 
-            if (m_LocalSettings.Settings.SpawnablesEnabled && m_LocalSettings.Settings.IndustriesEnabled && !m_UpdateIndustryBuildingsQuery.IsEmptyIgnoreFilter)
+            if (Settings.SpawnablesEnabled && Settings.IndustriesEnabled && !m_UpdateIndustryBuildingsQuery.IsEmptyIgnoreFilter)
             {
                 UpdateIndustryBuildings();
             }
 
-            if (m_LocalSettings.Settings.OfficesEnabled && !m_UpdateHighOfficesJobQuery.IsEmptyIgnoreFilter)
+            if (Settings.OfficesEnabled && !m_UpdateHighOfficesJobQuery.IsEmptyIgnoreFilter)
             {
                 UpdateHighOffices();
             }
@@ -115,13 +113,13 @@ namespace RealisticDensity.Systems
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            UnityEngine.Debug.Log("[RealisticDensity] System destroyed.");
+            Mod.DebugLog("System destroyed.");
 
         }
 
         private void UpdateCityBuildings()
         {
-            Mod.DebugLog("Run UpdateCityServicesJob");
+            Mod.DebugLog("Adjust city buildings.");
             m_UpdateCityServicesJobTypeHandle.AssignHandles(ref CheckedStateRef);
             UpdateCityServicesJob updateCityServicesJob = new()
             {
@@ -154,7 +152,7 @@ namespace RealisticDensity.Systems
 
         private void UpdateCommercialBuildings()
         {
-            Mod.DebugLog("Run UpdateCommercialBuildingsJob");
+            Mod.DebugLog("Adjust commercial buildings.");
             
             BuildingData buildingData = new()
             {
@@ -185,7 +183,7 @@ namespace RealisticDensity.Systems
 
         private void UpdateIndustryBuildings()
         {
-            Mod.DebugLog("Run UpdateIndustryBuildingsJob");
+            Mod.DebugLog("Adjust industrial buildings.");
 
             BuildingData buildingData = new()
             {
@@ -211,6 +209,12 @@ namespace RealisticDensity.Systems
                 ResourcePrefabs = m_ResourcePrefabs,
                 BuildingData = buildingData,
                 SpawnableBuildingData = spawnableBuildingData,
+                OfficesEnabled = Settings.OfficesEnabled,
+                OfficesFactor = Settings.OfficesFactor,
+                IndustryExtractorFactor = Settings.IndustryExtractorFactor,
+                IndustryProcessingFactor = Settings.IndustryProcessingFactor,
+                IndustryIncreaseMaxTransports = Settings.IndustryIncreaseMaxTransports,
+                IndustryIncreaseStorageCapacity = Settings.IndustryIncreaseStorageCapacity,
             };
             Dependency = updateIndustryBuildingsJob.Schedule(m_UpdateIndustryBuildingsQuery, Dependency);
             Barrier.AddJobHandleForProducer(Dependency);
@@ -218,30 +222,17 @@ namespace RealisticDensity.Systems
 
         private void UpdateHighOffices()
         {
-            Mod.DebugLog("Run UpdateHighOfficesJob");
+            Mod.DebugLog("Adjust high office buildings.");
             m_UpdateHighOfficesJobTypeHandle.AssignHandles(ref CheckedStateRef);
             UpdateHighOfficesJob updateHighOfficesJob = new()
             {
                 Ecb = Barrier.CreateCommandBuffer().AsParallelWriter(),
                 EntityHandle = m_UpdateHighOfficesJobTypeHandle.EntityTypeHandle,
                 BuildingPropertyDataLookup = m_UpdateHighOfficesJobTypeHandle.BuildingPropertyDataLookup,
+                OfficesFactor = Settings.OfficesFactor,
             };
             Dependency = updateHighOfficesJob.Schedule(m_UpdateHighOfficesJobQuery, Dependency);
             Barrier.AddJobHandleForProducer(Dependency);
-        }
-
-        private void LoadSettings()
-        {
-            try
-            {
-                m_LocalSettings = new();
-                m_LocalSettings.Init();
-                m_LocalSettingsLoaded = true;
-            }
-            catch (System.Exception e)
-            {
-                UnityEngine.Debug.Log($"[RealisticDensity] Error loading settings: {e.Message}");
-            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace RealisticDensity.Configuration
     /// </summary>
     public abstract class ConfigBase
     {
-        public static readonly string MOD_PATH = Path.Combine(Application.persistentDataPath, "Mods", MyPluginInfo.PLUGIN_NAME);
+        public static readonly string MOD_PATH = Path.Combine(Application.persistentDataPath, "Mods", Mod.Name);
 
         static readonly JsonSerializerSettings _serializerSettings = new()
         {

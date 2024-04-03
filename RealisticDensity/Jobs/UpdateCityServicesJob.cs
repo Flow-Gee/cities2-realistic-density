@@ -6,6 +6,7 @@ using RealisticDensity.Helper;
 using RealisticDensity.Prefabs;
 using RealisticDensity.Systems;
 using System.Runtime.CompilerServices;
+using Unity.Burst;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
@@ -115,6 +116,7 @@ namespace RealisticDensity.Jobs
         public ComponentLookup<ParkData> ParkDataLookup;
     }
 
+    [BurstCompile]
     public struct UpdateCityServicesJob : IJobChunk
     {
         public EntityCommandBuffer.ParallelWriter Ecb;

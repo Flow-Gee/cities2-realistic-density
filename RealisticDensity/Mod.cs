@@ -1,47 +1,57 @@
 ﻿using Colossal.Logging;
 using Game;
 using Game.Modding;
+using RealisticDensity.Systems;
+using System;
+using Unity.Entities;
 
 namespace RealisticDensity
 {
     public class Mod : IMod
     {
-        public const string Name = MyPluginInfo.PLUGIN_NAME;
-        public const string Version = MyPluginInfo.PLUGIN_VERSION;
+        public const string Name = "RealisticDensity";
+        public const string Version = "1.0.1";
         public static Mod Instance { get; set; }
-        internal ILog Log { get; private set; }
-        public void OnLoad()
-        {
-            Instance = this;
-            Log = LogManager.GetLogger(Name);
-#if VERBOSE
-            Log.effectivenessLevel = Level.Verbose;
-#elif DEBUG
-            Log.effectivenessLevel = Level.Debug;
-#endif
+        private readonly static ILog _log = LogManager.GetLogger("RealisticDensity").SetShowsErrorsInUI(false);
+        private World _world;
 
-            Log.Info("Loading.");
+        public void OnLoad(UpdateSystem updateSystem)
+        {
+            _log.Info(Environment.NewLine + @":::::::::  ::::::::::     :::     :::        ::::::::::: :::::::: ::::::::::: ::::::::  
+:+:    :+: :+:          :+: :+:   :+:            :+:    :+:    :+:    :+:    :+:    :+: 
++:+    +:+ +:+         +:+   +:+  +:+            +:+    +:+           +:+    +:+        
++#++:++#:  +#++:++#   +#++:++#++: +#+            +#+    +#++:++#++    +#+    +#+        
++#+    +#+ +#+        +#+     +#+ +#+            +#+           +#+    +#+    +#+        
+#+#    #+# #+#        #+#     #+# #+#            #+#    #+#    #+#    #+#    #+#    #+# 
+###    ### ########## ###     ### ########## ########### ########     ###     ########  
+:::::::::  :::::::::: ::::    :::  :::::::: ::::::::::: ::::::::::: :::   :::           
+:+:    :+: :+:        :+:+:   :+: :+:    :+:    :+:         :+:     :+:   :+:           
++:+    +:+ +:+        :+:+:+  +:+ +:+           +:+         +:+      +:+ +:+            
++#+    +:+ +#++:++#   +#+ +:+ +#+ +#++:++#++    +#+         +#+       +#++:             
++#+    +#+ +#+        +#+  +#+#+#        +#+    +#+         +#+        +#+              
+#+#    #+# #+#        #+#   #+#+# #+#    #+#    #+#         #+#        #+#              
+#########  ########## ###    ####  ######## ###########     ###        ###              ");
+            updateSystem.UpdateAt<RealisticDensitySystem>(SystemUpdatePhase.ModificationEnd);
+            _world = updateSystem.World;
+        }
+
+        private void SafelyRemove<T>()
+            where T : GameSystemBase
+        {
+            var system = _world.GetExistingSystemManaged<T>();
+
+            if (system != null)
+                _world?.DestroySystemManaged(system);
         }
 
         public void OnDispose()
         {
-            Log.Info("Mod disposed.");
-            Instance = null;
+            SafelyRemove<RealisticDensitySystem>();
         }
 
         public static void DebugLog(string message)
         {
-            UnityEngine.Debug.Log($"[{Name} | v{Version}] {message}");
-        }
-
-        public void OnCreateWorld(UpdateSystem updateSystem)
-        {
-            // Do nothing
-        }
-
-        public void OnLoad(UpdateSystem updateSystem)
-        {
-            throw new System.NotImplementedException();
+            _log.Info(message);
         }
     }
 }
