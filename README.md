@@ -5,6 +5,9 @@ Why a power plant only has 10 employees or a high school with 2000 students only
 
 **Then this mod is just right for you.**
 
+> [!NOTE]  
+> This mod is originally created by **89pleasure**. They have given me permission to maintain and continue development on this mod.
+
 ## Features:
 - Increased employee numbers for Commercial, Industrial, and Office zones
 - Increased employee numbers for service buildings such as schools, hospitals, clinics, power plants, police, fire stations, cargo train terminals, and harbors
