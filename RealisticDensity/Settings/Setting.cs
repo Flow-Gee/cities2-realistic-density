@@ -27,7 +27,7 @@ namespace RealisticDensity.Settings
 
         public override void SetDefaults()
         {
-            throw new System.NotImplementedException();
+
         }
     }
 
