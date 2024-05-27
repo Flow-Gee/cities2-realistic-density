@@ -3,34 +3,27 @@ using Game;
 using Game.Modding;
 using RealisticDensity.Systems;
 using System;
+using Colossal.IO.AssetDatabase;
+using Game.SceneFlow;
+using RealisticDensity.Settings;
 using Unity.Entities;
 
 namespace RealisticDensity
 {
     public class Mod : IMod
     {
-        public const string Name = "RealisticDensity";
-        public const string Version = "1.0.1";
         public static Mod Instance { get; set; }
-        private readonly static ILog _log = LogManager.GetLogger("RealisticDensity").SetShowsErrorsInUI(false);
+        private static readonly ILog _log = LogManager.GetLogger(nameof(RealisticDensity)).SetShowsErrorsInUI(false);
         private World _world;
+        public static Setting Setting;
 
         public void OnLoad(UpdateSystem updateSystem)
         {
-            _log.Info(Environment.NewLine + @":::::::::  ::::::::::     :::     :::        ::::::::::: :::::::: ::::::::::: ::::::::  
-:+:    :+: :+:          :+: :+:   :+:            :+:    :+:    :+:    :+:    :+:    :+: 
-+:+    +:+ +:+         +:+   +:+  +:+            +:+    +:+           +:+    +:+        
-+#++:++#:  +#++:++#   +#++:++#++: +#+            +#+    +#++:++#++    +#+    +#+        
-+#+    +#+ +#+        +#+     +#+ +#+            +#+           +#+    +#+    +#+        
-#+#    #+# #+#        #+#     #+# #+#            #+#    #+#    #+#    #+#    #+#    #+# 
-###    ### ########## ###     ### ########## ########### ########     ###     ########  
-:::::::::  :::::::::: ::::    :::  :::::::: ::::::::::: ::::::::::: :::   :::           
-:+:    :+: :+:        :+:+:   :+: :+:    :+:    :+:         :+:     :+:   :+:           
-+:+    +:+ +:+        :+:+:+  +:+ +:+           +:+         +:+      +:+ +:+            
-+#+    +:+ +#++:++#   +#+ +:+ +#+ +#++:++#++    +#+         +#+       +#++:             
-+#+    +#+ +#+        +#+  +#+#+#        +#+    +#+         +#+        +#+              
-#+#    #+# #+#        #+#   #+#+# #+#    #+#    #+#         #+#        #+#              
-#########  ########## ###    ####  ######## ###########     ###        ###              ");
+            Setting = new Setting(this);
+            Setting.RegisterInOptionsUI();
+            GameManager.instance.localizationManager.AddSource("en-US", new LocaleEN(Setting));
+            AssetDatabase.global.LoadSettings(nameof(RealisticDensity), Setting, new Setting(this));
+
             updateSystem.UpdateAt<RealisticDensitySystem>(SystemUpdatePhase.ModificationEnd);
             _world = updateSystem.World;
         }

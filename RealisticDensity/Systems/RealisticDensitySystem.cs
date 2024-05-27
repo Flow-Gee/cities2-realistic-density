@@ -22,7 +22,7 @@ namespace RealisticDensity.Systems
         readonly public static int kProductionFactor = 3;
 
         private ModificationEndBarrier Barrier;
-        public static RealisticDensitySettings Settings;
+        public static Setting Settings;
 
         private UpdateCommercialBuildingsTypeHandle m_UpdateCommercialBuildingsTypeHandle;
         private EntityQuery m_UpdateCommercialBuildingsQuery;
@@ -42,7 +42,7 @@ namespace RealisticDensity.Systems
             base.OnCreate();
 
             // Load settings
-            Settings = new RealisticDensitySettings();
+            Settings = Mod.Setting;
 
             // Create a barrier system using the default world
             Barrier = World.GetOrCreateSystemManaged<ModificationEndBarrier>();

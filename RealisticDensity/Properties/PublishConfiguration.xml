@@ -1,5 +1,5 @@
 ﻿<Publish>
-	<ModId Value="77309" />
+	<ModId Value="78187" />
 	<DisplayName Value="RealisticDensity" />
 	<ShortDescription Value="Elevate your city's realism and challenge! Boost job numbers across zones and vital buildings." />
 	<LongDescription>
@@ -54,14 +54,11 @@ Join our discord community: [https://discord.gg/Fc6KuuBkRr](https://discord.gg/F
 	<Screenshot Value="" />
 	<Tag Value="Code Mod" />
 	<ForumLink Value="" />
-	<ModVersion Value="1.0.1" />
+	<ModVersion Value="1.1.0" />
 	<GameVersion Value="1.1.*" />
-	<Dependency Id="77209" />
-	<Dependency Id="77225" Version="1.1.*" />
 	<ChangeLog>
-**v1.0.1**
-- Added support for game version 1.1.1f
+- Remove Gooee dependency
 	</ChangeLog>
 	<ExternalLink Type="discord" Url="https://discord.gg/Fc6KuuBkRr" />
-	<ExternalLink Type="github" Url="https://github.com/89pleasure/cities2-realistic-density" />
+	<ExternalLink Type="github" Url="https://github.com/kosch104/cities2-realistic-density" />
 </Publish>
