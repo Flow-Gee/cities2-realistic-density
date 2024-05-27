@@ -3,7 +3,7 @@
 	<DisplayName Value="RealisticDensity" />
 	<ShortDescription Value="Elevate your city's realism and challenge! Boost job numbers across zones and vital buildings." />
 	<LongDescription>
-# RealisticDensity Mod for Cities Skylines II
+# RealisticDensity Mod
 
 Have you always been annoyed that you have to build such large industrial areas? Or that your business takes up almost as much space as your residential areas?
 Why a power plant only has 10 employees or a high school with 2000 students only employs a handful of teachers?
@@ -35,10 +35,6 @@ This mod is originally created by **89pleasure**. He has given me permission to 
 - It is recommended to use the mod in a new city
 - However, it is possible to use the mod in an existing city, as it does not alter the employee numbers of already existing buildings
 
-## Community, Feedback and Support
-If you need any help or are you interested in modding yourself?
-Join our discord community: [https://discord.gg/Fc6KuuBkRr](https://discord.gg/Fc6KuuBkRr)
-
 ## Credits
 - Thanks **optimus-code** for his C# knowledge and help
 
@@ -57,6 +53,7 @@ Join our discord community: [https://discord.gg/Fc6KuuBkRr](https://discord.gg/F
 	<ModVersion Value="1.1.0" />
 	<GameVersion Value="1.1.*" />
 	<ChangeLog>
+- Fixed Settings Display
 - Remove Gooee dependency
 	</ChangeLog>
 	<ExternalLink Type="discord" Url="https://discord.gg/Fc6KuuBkRr" />
