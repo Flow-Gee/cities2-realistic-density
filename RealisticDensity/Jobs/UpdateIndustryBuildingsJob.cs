@@ -4,7 +4,6 @@ using Game.Prefabs;
 using Game.Tools;
 using RealisticDensity.Helper;
 using RealisticDensity.Prefabs;
-using RealisticDensity.Settings;
 using RealisticDensity.Systems;
 using System.Runtime.CompilerServices;
 using Unity.Burst;

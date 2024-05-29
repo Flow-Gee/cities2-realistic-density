@@ -3,7 +3,7 @@
 	<DisplayName Value="RealisticDensity" />
 	<ShortDescription Value="Elevate your city's realism and challenge! Boost job numbers across zones and vital buildings." />
 	<LongDescription>
-# RealisticDensity Mod
+# RealisticDensity
 
 Have you always been annoyed that you have to build such large industrial areas? Or that your business takes up almost as much space as your residential areas?
 Why a power plant only has 10 employees or a high school with 2000 students only employs a handful of teachers?
@@ -30,7 +30,7 @@ This mod is originally created by **89pleasure**. He has given me permission to 
 ## Important Information:
 - **The mod is currently in the BETA phase - so problems can therefore occur**
 - **The mod is currently activated globally for all your cities!**
-- **It has an impact on your savegame and can possibly break your city**
+- **It has an impact on your save game and can possibly break your city**
 - This mod has an impact on the performance of the game (by design)
 - It is recommended to use the mod in a new city
 - However, it is possible to use the mod in an existing city, as it does not alter the employee numbers of already existing buildings
@@ -49,12 +49,11 @@ This mod is originally created by **89pleasure**. He has given me permission to 
 	<Thumbnail Value="Properties/Thumbnail.png" />
 	<Screenshot Value="" />
 	<Tag Value="Code Mod" />
-	<ForumLink Value="" />
-	<ModVersion Value="1.1.0" />
+	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/realistic-density.1682055/" />
+	<ModVersion Value="1.1.2" />
 	<GameVersion Value="1.1.*" />
 	<ChangeLog>
-- Fixed Settings Display
-- Remove Gooee dependency
+- Corrected Settings location
 	</ChangeLog>
 	<ExternalLink Type="discord" Url="https://discord.gg/Fc6KuuBkRr" />
 	<ExternalLink Type="github" Url="https://github.com/kosch104/cities2-realistic-density" />

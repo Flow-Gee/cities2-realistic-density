@@ -2,7 +2,6 @@
 using Game.Prefabs;
 using Game.Tools;
 using RealisticDensity.Prefabs;
-using RealisticDensity.Settings;
 using System.Runtime.CompilerServices;
 using Unity.Burst;
 using Unity.Burst.Intrinsics;

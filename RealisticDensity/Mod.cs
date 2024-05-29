@@ -5,7 +5,6 @@ using RealisticDensity.Systems;
 using System;
 using Colossal.IO.AssetDatabase;
 using Game.SceneFlow;
-using RealisticDensity.Settings;
 using Unity.Entities;
 
 namespace RealisticDensity

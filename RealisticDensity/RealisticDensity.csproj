@@ -13,8 +13,8 @@
 			https://api.nuget.org/v3/index.json;
 		</RestoreAdditionalProjectSources>
 		<NoWarn>MSB3277</NoWarn>
-		<AssemblyVersion>1.1.0</AssemblyVersion>
-		<FileVersion>1.1.0</FileVersion>
+		<AssemblyVersion>1.1.2</AssemblyVersion>
+		<FileVersion>1.1.2</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -130,6 +130,9 @@
 	<ItemGroup>
 		<None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
 		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Settings\" />
 	</ItemGroup>
 
 </Project>

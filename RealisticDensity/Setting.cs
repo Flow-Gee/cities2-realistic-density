@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using Colossal;
+using Colossal.IO.AssetDatabase;
 using Game.Modding;
 using RealisticDensity.Systems;
 
-namespace RealisticDensity.Settings
+namespace RealisticDensity
 {
+    [FileLocation("ModsSettings/" + nameof(RealisticDensity) + "/" + nameof(RealisticDensity))]
+    //[FileLocation("Skylines2_TestOnFileLocation")]
     public class Setting : ModSetting
     {
         public bool DisableMod { get; set; } = false;
@@ -23,6 +26,7 @@ namespace RealisticDensity.Settings
 
         public Setting(IMod mod) : base(mod)
         {
+
         }
 
         public override void SetDefaults()

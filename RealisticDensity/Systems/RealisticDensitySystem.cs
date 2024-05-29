@@ -2,7 +2,6 @@
 using Unity.Entities;
 using UnityEngine.Scripting;
 using Game.SceneFlow;
-using RealisticDensity.Settings;
 using RealisticDensity.Jobs;
 using Unity.Jobs;
 using Game.Common;
