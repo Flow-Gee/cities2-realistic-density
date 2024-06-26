@@ -1,12 +1,19 @@
-﻿using Game.Companies;
+﻿using cohtml.Net;
+using Colossal.Mathematics;
+using Game.Buildings;
+using Game.Companies;
 using Game.Economy;
 using Game.Prefabs;
 using Game.Simulation;
 using RealisticDensity.Common;
 using RealisticDensity.Systems;
+using System;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
+using static Game.UI.MapMetadataSystem;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 namespace RealisticDensity.Helper
 {
@@ -50,7 +57,13 @@ namespace RealisticDensity.Helper
             serviceCompanyData.m_WorkPerUnit = 512;
             do
             {
-                int estimatedProfit = ServiceCompanySystem.EstimateDailyProfit(workers, serviceAvailable, serviceCompanyData, buildingData, industrialProcessData, ref economyParameterData, workplaceData, spawnableBuildingData, resourcePrefabs, resourceDatas, tradeCosts);
+
+                int companyProductionPerDay = EconomyUtils.GetCompanyProductionPerDay(buildingEfficiency: 1f, workers, level: 1, isIndustrial: false, workplaceData, industrialProcessData, resourcePrefabs, resourceDatas, ref economyParameterData);
+
+
+                int estimatedProfit = (int)math.ceil(companyProductionPerDay * EconomyUtils.GetMarketPrice(industrialProcessData.m_Output.m_Resource, resourcePrefabs, ref resourceDatas));
+
+  
                 if (0.001f * estimatedProfit > prefab.profitability)
                 {
                     num2 = serviceCompanyData.m_WorkPerUnit;
@@ -78,8 +91,12 @@ namespace RealisticDensity.Helper
             industrialProcessData.m_WorkPerUnit = 512;
             do
             {
-                int estimatedProduction = ExtractorCompanySystem.EstimateDailyProduction(1f, fittingWorkers, 1, workplaceData, industrialProcessData, ref economyParameterData);
-                int estimatedProfit = ExtractorCompanySystem.EstimateDailyProfit(estimatedProduction, fittingWorkers, industrialProcessData, ref economyParameterData, workplaceData, spawnableBuildingData, resourcePrefabs, resourceDatas);
+                int companyProductionPerDay = EconomyUtils.GetCompanyProductionPerDay(buildingEfficiency: 1f, fittingWorkers, level: 1, isIndustrial: true, workplaceData, industrialProcessData, resourcePrefabs, resourceDatas, ref economyParameterData);
+
+
+                int estimatedProfit = (int)math.ceil(companyProductionPerDay * EconomyUtils.GetIndustrialPrice(industrialProcessData.m_Output.m_Resource, resourcePrefabs, ref resourceDatas));
+
+
                 if (estimatedProfit * 64f / 10000f > prefab.profitability)
                 {
                     num4 = industrialProcessData.m_WorkPerUnit;
@@ -104,14 +121,23 @@ namespace RealisticDensity.Helper
         public static int WorkPerUnitForProcessingIndustry(CompanyPrefab prefab, IndustrialProcessData industrialProcessData, WorkplaceData workplaceData, ResourcePrefabs resourcePrefabs, ComponentLookup<ResourceData> resourceDatas, EconomyParameterData economyParameterData, BuildingData buildingData, SpawnableBuildingData spawnableBuildingData)
         {
             float3 float2 = EconomyUtils.BuildPseudoTradeCost(5000f, industrialProcessData, resourceDatas, resourcePrefabs);
-            int num6 = Mathf.RoundToInt(industrialProcessData.m_MaxWorkersPerCell * 1000f);
+            int fittingWorkers = Mathf.RoundToInt(industrialProcessData.m_MaxWorkersPerCell * 1000f);
             int num7 = 1;
             int num8 = 65536;
             industrialProcessData.m_WorkPerUnit = 512;
             do
             {
-                int estimatedProfit = ProcessingCompanySystem.EstimateDailyProfit(num6, industrialProcessData, buildingData, ref economyParameterData, float2, workplaceData, spawnableBuildingData, resourcePrefabs, resourceDatas);
-                if (economyParameterData.m_IndustrialProfitFactor * estimatedProfit > prefab.profitability)
+
+                int companyProductionPerDay = EconomyUtils.GetCompanyProductionPerDay(buildingEfficiency: 1f, fittingWorkers, level: 1, isIndustrial: true, workplaceData, industrialProcessData, resourcePrefabs, resourceDatas, ref economyParameterData);
+
+                int num = Mathf.RoundToInt(1f * (float)companyProductionPerDay / (float)EconomyUtils.kCompanyUpdatesPerDay);
+                ResourceStack input = industrialProcessData.m_Input1;
+                ResourceStack input2 = industrialProcessData.m_Input2;
+                ResourceStack output = industrialProcessData.m_Output;
+               
+                int estimatedProfit = Mathf.RoundToInt((float)companyProductionPerDay * (float)EconomyUtils.GetMarketPrice(output.m_Resource, resourcePrefabs, ref resourceDatas));
+
+                if (economyParameterData.m_IndustrialEfficiency * estimatedProfit > prefab.profitability)
                 {
                     num7 = industrialProcessData.m_WorkPerUnit;
                 }
